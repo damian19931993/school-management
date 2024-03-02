@@ -8,6 +8,7 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private int id;
 
     @Column(name = "first_name")
@@ -25,6 +26,9 @@ public class Student {
     @Column(name = "is_active")
     private boolean isActive;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "student_detail_id", referencedColumnName = "id")
+    private StudentDetail studentDetail;
     public Student() {
     }
 
@@ -84,4 +88,11 @@ public class Student {
         this.isActive = active;
     }
 
+    public StudentDetail getStudentDetail() {
+        return studentDetail;
+    }
+
+    public void setStudentDetail(StudentDetail studentDetail) {
+        this.studentDetail = studentDetail;
+    }
 }

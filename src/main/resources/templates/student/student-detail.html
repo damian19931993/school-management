@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles del Estudiante</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Detalles del Estudiante</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Segundo Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
+            <th>Dirección</th>
+            <th>Activo</th>
+            <th>Teléfono 1</th>
+            <th>Teléfono 2</th>
+            <th>Teléfono 3</th>
+            <th>Responsable 1</th>
+            <th>Responsable 2</th>
+            <th>Responsable 3</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${student.firstName}"></td>
+            <td th:text="${student.middleName}"></td>
+            <td th:text="${student.lastName}"></td>
+            <td th:text="${student.dni}"></td>
+            <td th:text="${studentDetail.address}"></td>
+            <td th:text="${student.isActive ? 'Sí' : 'No'}"></td>
+            <td th:text="${studentDetail.phone1}"></td>
+            <td th:text="${studentDetail.phone2}"></td>
+            <td th:text="${studentDetail.phone3}"></td>
+            <td th:text="${studentDetail.responsible1Fullname}"></td>
+            <td th:text="${studentDetail.responsible2Fullname}"></td>
+            <td th:text="${studentDetail.responsible3Fullname}"></td>
+        </tr>
+        </tbody>
+
+
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

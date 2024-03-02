@@ -55,7 +55,42 @@
                     <input type="checkbox" id="isActive" class="form-check-input" th:field="*{active}">
                     <label class="form-check-label" for="isActive">Activo</label>
                 </div>
+                <!-- Campos para StudentDetail -->
+                <div class="form-group">
+                    <label for="address">Dirección:</label>
+                    <input type="text" id="address" class="form-control" th:field="*{studentDetail.address}" placeholder="Ingrese la dirección">
+                </div>
+                <div class="form-group">
+                    <label for="phone1">Teléfono 1:</label>
+                    <input type="text" id="phone1" class="form-control" th:field="*{studentDetail.phone1}" placeholder="Ingrese el primer teléfono">
+                </div>
+                <div class="form-group">
+                    <label for="phone2">Teléfono 2:</label>
+                    <input type="text" id="phone2" class="form-control" th:field="*{studentDetail.phone2}" placeholder="Ingrese el segundo teléfono">
+                </div>
+                <div class="form-group">
+                    <label for="phone3">Teléfono 3:</label>
+                    <input type="text" id="phone3" class="form-control" th:field="*{studentDetail.phone3}" placeholder="Ingrese el tercer teléfono">
+                </div>
+                <div class="form-group">
+                    <label for="responsible1Fullname">Responsable 1:</label>
+                    <input type="text" id="responsible1Fullname" class="form-control" th:field="*{studentDetail.responsible1Fullname}" placeholder="Responsable 1">
+                </div>
+                <div class="form-group">
+                    <label for="responsible2Fullname">Responsable 2:</label>
+                    <input type="text" id="responsible2Fullname" class="form-control" th:field="*{studentDetail.responsible2Fullname}" placeholder="Responsable 2">
+                </div>
+                <div class="form-group">
+                    <label for="responsible3Fullname">Responsable 3:</label>
+                    <input type="text" id="responsible3Fullname" class="form-control" th:field="*{studentDetail.responsible3Fullname}" placeholder="Responsable 3">
+                </div>
+                <div class="form-group">
+                    <label for="photo">Foto:</label>
+                    <input type="file" id="photo" class="form-control" th:field="*{studentDetail.photoPath}">
+                </div>
+
                 <button type="submit" class="btn btn-primary mt-4 w-100">Guardar</button>
+
             </form>
         </div>
     </div>

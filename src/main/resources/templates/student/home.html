@@ -76,8 +76,10 @@
         <h1>Estudiantes</h1>
     </div>
     <div class="search-bar">
-        <input type="text" class="form-control d-inline-block search-input" placeholder="Buscar estudiante...">
-        <button class="btn btn-primary">Buscar</button>
+        <form th:action="@{/student/search}" method="get">
+            <input type="text" name="dni" class="form-control d-inline-block search-input" placeholder="Buscar estudiante por DNI...">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </form>
     </div>
     <a th:href="@{/student/create}" class="btn btn-primary btn-sm mb-3">Agregar Estudiante</a>
     <!-- Aquí puedes agregar más contenido como tablas o información adicional -->
