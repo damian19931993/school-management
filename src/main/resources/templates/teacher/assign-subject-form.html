@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Asignar Materia a Docente</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h2>Asignar Materia a Docente</h2>
+  <form th:action="@{/teacher/saveAssignment}" method="post">
+    <!-- Campos ocultos para enviar el ID del docente -->
+    <input type="hidden" th:value="${teacher.id}" name="teacherId"/>
+    <div class="form-group">
+      <label for="firstName">Nombre:</label>
+      <input type="text" id="firstName" class="form-control" th:value="${teacher.firstName}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Apellido:</label>
+      <input type="text" id="lastName" class="form-control" th:value="${teacher.lastName}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="dni">DNI:</label>
+      <input type="text" id="dni" class="form-control" th:value="${teacher.dni}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="subject">Materia:</label>
+      <select id="subject" class="form-control" name="subjectId">
+        <option value="">Seleccione una materia</option>
+        <option th:each="subject : ${subjects}"
+                th:value="${subject.id}"
+                th:text="${subject.subjectName}">Materia</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Asignar</button>
+  </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Materias</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+  <style>
+    .search-bar {
+        margin-bottom: 20px;
+    }
+    .subject-list {
+        margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>Materias</h2>
+    <a th:href="@{/subject/create}" class="btn btn-success btn-lg">
+      <i class="fas fa-plus"></i> Agregar Materia
+    </a>
+  </div>
+  <div class="search-bar">
+    <form th:action="@{/subject/search}" method="get" class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Buscar materia..." aria-label="Search" name="searchTerm">
+      <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+    </form>
+  </div>
+  <!-- Lista de materias -->
+  <ul class="list-group subject-list">
+    <!-- Bloque repetitivo por cada materia, se asume dinámico con Thymeleaf -->
+    <li class="list-group-item" th:each="subject : ${subjects}">
+      <span th:text="${subject.name}">Nombre de la materia</span>
+    </li>
+  </ul>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

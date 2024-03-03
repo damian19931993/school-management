@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Materia</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Agregar Materia</h2>
+    <form th:action="@{/subject/save}" th:object="${subject}" method="post">
+        <div class="form-group">
+            <label for="subjectName">Nombre:</label>
+            <input type="text" class="form-control" id="subjectName" th:field="*{subjectName}" placeholder="Ingrese el nombre de la materia">
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="isActive" th:field="*{active}">
+            <label class="form-check-label" for="isActive">Activa</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

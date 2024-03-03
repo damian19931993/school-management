@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Docentes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 56px;
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        .search-bar, .buttons {
+            margin-bottom: 20px;
+        }
+        .buttons a {
+            margin-right: 10px; /* Espacio entre botones */
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <a class="navbar-brand" href="#">Gestión Escolar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+            <!-- Aquí puedes agregar más elementos al menú si es necesario -->
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="header text-center">
+        <h1>Gestión de Docentes</h1>
+    </div>
+    <div class="search-bar text-center">
+        <input type="text" class="form-control d-inline-block" style="width: 250px;" placeholder="Buscar docente...">
+        <button class="btn btn-primary">Buscar</button>
+    </div>
+    <div class="buttons text-center">
+        <a th:href="@{/teacher/create}" class="btn btn-success">Agregar Docente</a>
+        <a th:href="@{/teacher/showAssignmentPage}" class="btn btn-info">Asignar Materias</a> <!-- Nuevo botón para asignar materias -->
+    </div>
+    <!-- Aquí puedes agregar más contenido como tablas o información adicional -->
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

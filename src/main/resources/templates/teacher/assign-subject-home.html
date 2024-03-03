@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Asignar Materias a Docentes</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .search-bar {
+        margin-bottom: 20px;
+    }
+    .teacher-list {
+        margin-top: 20px;
+    }
+    .action-buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+    .subjects-list {
+        margin-bottom: 0;
+        padding-left: 0;
+        list-style: none;
+    }
+    .subjects-list li {
+        display: inline-block;
+        margin-right: 10px;
+        background-color: #f8f9fa;
+        padding: 5px;
+        border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <h2>Asignar Materias a Docentes</h2>
+  <div class="search-bar">
+    <input type="text" class="form-control" placeholder="Buscar docente...">
+    <button class="btn btn-primary mt-2">Buscar</button>
+  </div>
+  <div class="teacher-list">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Docente</th>
+        <th>Materias Asignadas</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- Loop through teachers -->
+      <tr th:each="teacher : ${teachers}">
+        <td th:text="${teacher.firstName} + ' ' + ${teacher.lastName}"></td>
+        <td>
+          <ul class="subjects-list">
+            <!-- Loop through assigned subjects -->
+            <li th:each="teacherSubject : ${teacher.teacherSubjects}" th:text="${teacherSubject.schoolSubject.subjectName}"></li>
+          </ul>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <a th:href="@{/teacher/assignSubjectForm/{teacherId}(teacherId=${teacher.id})}" class="btn btn-success btn-sm">Asignar Materia</a>
+            <a th:href="@{/teacher/deleteAssignment/{teacherId}(teacherId=${teacher.id})}" class="btn btn-danger btn-sm">Eliminar Materia</a>
+
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
