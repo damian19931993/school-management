@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Asignar Roles a Docentes</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Docentes Activos</h2>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Email</th>
+            <th>Roles Actuales</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacher : ${teachers}">
+            <td th:text="${teacher.firstName}">Nombre</td>
+            <td th:text="${teacher.lastName}">Apellido</td>
+            <td th:text="${teacher.email}">Email</td>
+            <td>
+                <!-- Aquí debes ajustar cómo obtener los roles desde el objeto teacher -->
+                <span th:each="role : ${teacher.user.roles}">
+                            <span th:text="${role.authority}"></span><br/>
+                        </span>
+            </td>
+            <td>
+                <!-- Los enlaces deben ajustarse a tu controlador y lógica de aplicación -->
+                <a th:href="@{/teacher/addRole/{id}(id=${teacher.id})}" class="btn btn-success">Agregar Rol</a>
+                <a th:href="@{/teacher/updateRole/{id}(id=${teacher.id})}" class="btn btn-primary">Actualizar Rol</a>
+                <a th:href="@{/teacher/removeRole/{id}(id=${teacher.id})}" class="btn btn-danger">Eliminar Rol</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Opcional: jQuery y Bootstrap Bundle (incluye Popper) JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

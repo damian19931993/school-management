@@ -1,7 +1,9 @@
 package com.schoolmanagement.com.schoolmanagement.controller;
 
+import com.schoolmanagement.com.schoolmanagement.entity.Course;
 import com.schoolmanagement.com.schoolmanagement.entity.Student;
 import com.schoolmanagement.com.schoolmanagement.entity.StudentDetail;
+import com.schoolmanagement.com.schoolmanagement.service.CourseService;
 import com.schoolmanagement.com.schoolmanagement.service.StudentDetailService;
 import com.schoolmanagement.com.schoolmanagement.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -22,6 +25,9 @@ public class StudentController {
 
     @Autowired
     StudentDetailService studentDetailService;
+
+    @Autowired
+    CourseService courseService;
 
     @GetMapping("")
     public String home(){
@@ -78,5 +84,70 @@ public class StudentController {
             return "redirect:/student";
         }
     }
+    @GetMapping("/showAssignCourse")
+    public String showAssignCoursesPage(Model model) {
+        // Obtener todos los estudiantes activos
+        List<Student> activeStudents = studentService.findAllActiveStudents();
+
+        // Agregar los estudiantes activos al modelo
+        model.addAttribute("students", activeStudents);
+
+        // Retornar el nombre de la vista (archivo HTML)
+        return "student/assign-course-home";
+    }
+
+    @GetMapping("/assignCourse/{studentId}")
+    public String showAssignCourseForm(@PathVariable("studentId") int studentId, Model model) {
+        // Buscar el estudiante por ID
+        Optional<Student> studentOptional = studentService.findById(studentId);
+        if (studentOptional == null) {
+            // Manejar el caso en que el estudiante no se encuentre, por ejemplo, redirigir a una página de error
+            return "redirect:/errorPage";
+        }
+
+        // Obtener todos los cursos activos
+        List<Course> activeCourses = courseService.findAllActiveCourses();
+
+        if (studentOptional.isPresent()) {
+            model.addAttribute("student", studentOptional.get());
+            model.addAttribute("activeCourses", activeCourses);
+        } else {
+            // Manejar el caso de que el estudiante no se encuentre
+            return "redirect:/errorPage";
+        }
+
+        // Agregar el estudiante y los cursos activos al modelo
+
+
+
+        // Retornar la vista del formulario de asignación de cursos
+        return "student/assign-course-form";
+    }
+
+    @PostMapping("/saveAssignedCourse")
+    public String saveAssignedCourse(@RequestParam("studentId") int studentId,
+                                     @RequestParam("courseIds") List<Integer> courseIds) {
+        Optional<Student> studentOptional = studentService.findById(studentId);
+        if (!studentOptional.isPresent()) {
+            return "redirect:/errorPage";
+        }
+
+        Student student = studentOptional.get();
+        List<Course> selectedCourses = courseService.findAllByIds(courseIds);
+
+        // Limpiar las asignaciones de cursos anteriores si es necesario
+        // Esto depende de la lógica de tu negocio
+
+
+        for (Course course : selectedCourses) {
+            student.addCourse(course);
+        }
+
+        // Guarda el estudiante con los cursos asignados
+        studentService.save(student);
+
+        return "redirect:/student/showAssignCourse";
+    }
+
 
 }

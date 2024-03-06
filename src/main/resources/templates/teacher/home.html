@@ -43,8 +43,45 @@
     </div>
     <div class="buttons text-center">
         <a th:href="@{/teacher/create}" class="btn btn-success">Agregar Docente</a>
-        <a th:href="@{/teacher/showAssignmentPage}" class="btn btn-info">Asignar Materias</a> <!-- Nuevo botón para asignar materias -->
+        <a th:href="@{/teacher/showAssignmentPage}" class="btn btn-info">Asignar Materias</a>
     </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Cursos Asignados</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="teacher : ${teachers}">
+                <td th:text="${teacher.firstName}"></td>
+                <td th:text="${teacher.lastName}"></td>
+                <td th:text="${teacher.dni}"></td>
+                <td th:text="${teacher.email}"></td>
+                <td>
+                    <span th:each="authority : ${teacher.user?.authority}" th:text="${authority.authority}"></span>
+                </td>
+                <td>
+                    <span th:each="course : ${teacher.courses}" th:text="${course.grade + ' ' + course.division} + ', '"></span>
+                </td>
+                <td>
+                    <a th:href="@{/teacher/assignRole/{id}(id=${teacher.id})}" class="btn btn-primary">Asignar Rol</a>
+                    <a th:href="@{/teacher/showAssignCourseForm/{id}(id=${teacher.id})}" class="btn btn-secondary">Asignar Curso</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
     <!-- Aquí puedes agregar más contenido como tablas o información adicional -->
 </div>
 
@@ -53,3 +90,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+

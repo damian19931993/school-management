@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar/Editar Curso</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Agregar/Editar Curso</h2>
+    <form th:action="@{/course/save}" th:object="${course}" method="post">
+        <div class="form-group">
+            <label for="grade">Nombre del Curso</label>
+            <input type="text" class="form-control" id="grade" th:field="*{grade}" placeholder="Nombre del Curso">
+        </div>
+        <div class="form-group">
+            <label for="shift">Turno</label>
+            <input type="text" class="form-control" id="shift" th:field="*{shift}" placeholder="Turno">
+        </div>
+        <div class="form-group">
+            <label for="division">División</label>
+            <input type="text" class="form-control" id="division" th:field="*{division}" placeholder="División">
+        </div>
+        <div class="form-group">
+            <label for="orientation">Orientación</label>
+            <input type="text" class="form-control" id="orientation" th:field="*{orientation}" placeholder="Orientación">
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="active" th:field="*{isActive}">
+            <label class="form-check-label" for="active">
+                Activo
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

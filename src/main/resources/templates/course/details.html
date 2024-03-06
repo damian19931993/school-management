@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles del Curso</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Detalles del Curso</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${course.grade} + ' ' + ${course.division} + ' - ' + ${course.orientation}"></h5>
+            <h6 class="card-subtitle mb-2 text-muted" th:text="'Turno: ' + ${course.shift}"></h6>
+        </div>
+    </div>
+
+    <h3>Alumnos Asignados</h3>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.id}"></td>
+            <td th:text="${student.firstName}"></td>
+            <td th:text="${student.lastName}"></td>
+            <td th:text="${student.dni}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/course/list" class="btn btn-primary">Volver a la lista de cursos</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

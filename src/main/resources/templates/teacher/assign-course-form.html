@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Asignar Cursos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Asignar Cursos a Docente</h2>
+    <form th:action="@{/teacher/saveAssignedCourses}" method="post">
+        <div class="form-group">
+            <label>Docente:</label>
+            <input type="text" id="teacherName" name="teacherName" th:value="${teacher.firstName + ' ' + teacher.lastName}" readonly class="form-control">
+            <!-- Oculto, si aún necesitas pasar el ID del docente -->
+            <input type="hidden" id="teacherId" name="teacherId" th:value="${teacher.id}">
+        </div>
+        <div class="form-group">
+            <label>Seleccionar Cursos:</label>
+            <div th:each="course : ${courses}">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" th:value="${course.id}" th:name="assignedCourses">
+                    <label class="form-check-label" th:text="${course.grade + ' ' + course.division}"></label>
+
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Asignar Cursos</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

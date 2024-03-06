@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Cursos Activos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Cursos Activos</h1>
+
+    <div class="row mb-3">
+        <div class="col">
+            <form th:action="@{/courses}" method="get" class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" class="form-control" name="search" placeholder="Buscar cursos...">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+            </form>
+        </div>
+        <div class="col text-right">
+            <a th:href="@{/course/create}" class="btn btn-success">Agregar Curso</a>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Curso</th>
+            <th>Turno</th>
+            <th>División</th>
+            <th>Orientación</th>
+            <th>Detalle</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="course : ${courses}">
+            <td th:text="${course.grade}"></td>
+            <td th:text="${course.shift}"></td>
+            <td th:text="${course.division}"></td>
+            <td th:text="${course.orientation}"></td>
+            <td>
+                <a th:href="@{/course/details/{id}(id=${course.id})}" class="btn btn-info btn-sm">Detalle</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Opcional: JavaScript y dependencias de Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

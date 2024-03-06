@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Calificaciones</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-3">
+    <h2>Planilla de Calificaciones</h2>
+    <p>Curso: <span th:text="${course.grade} + '° ' + ${course.division} + ' - ' + ${course.orientation}"></span></p>
+    <p>Materia: <span th:text="${subject.name}"></span></p>
+    <p>Docente: <span th:text="${teacherName}"></span></p>
+    <form th:action="@{/saveGrades}" th:object="${gradeForm}" method="post">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Alumno</th>
+                <th th:each="i : ${#numbers.sequence(1, 15)}">Calificación [[${i}]]</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student, iterStat : ${students}">
+                <td th:text="${student.name}">Nombre Alumno</td>
+                <td th:each="i : ${#numbers.sequence(1, 15)}">
+                    <input type="number" th:name="|grades[${iterStat.index}][${i-1}]|" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Guardar Calificaciones</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

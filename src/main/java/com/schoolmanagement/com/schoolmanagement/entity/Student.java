@@ -2,6 +2,9 @@ package com.schoolmanagement.com.schoolmanagement.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "student")
 public class Student {
@@ -29,6 +32,14 @@ public class Student {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "student_detail_id", referencedColumnName = "id")
     private StudentDetail studentDetail;
+
+    @ManyToMany
+    @JoinTable(
+            name = "course_student",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Set<Course> courses = new HashSet<>();
     public Student() {
     }
 
@@ -94,5 +105,24 @@ public class Student {
 
     public void setStudentDetail(StudentDetail studentDetail) {
         this.studentDetail = studentDetail;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+
+    // Métodos para agregar y remover cursos
+    public void addCourse(Course course) {
+        this.courses.add(course);
+        course.getStudents().add(this);
+    }
+
+    public void removeCourse(Course course) {
+        this.courses.remove(course);
+        course.getStudents().remove(this);
     }
 }

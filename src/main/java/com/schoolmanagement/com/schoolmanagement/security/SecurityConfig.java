@@ -20,9 +20,12 @@ public class SecurityConfig {
         //define query to retrieve a user by username
         jdbcUserDetailsManager.setUsersByUsernameQuery(
                 "select username, password, enabled from users where username=?");
-        //define query to retrieve the authorities/roles by username
+
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
-                "select username, authority from authorities where username=?");
+                "select u.username, a.authority " +
+                        "from users u " +
+                        "inner join authorities a on u.authority_id = a.id " +
+                        "where u.username=?");
 
         return jdbcUserDetailsManager;
     }
@@ -32,7 +35,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(configurer ->
                         configurer
-                                .requestMatchers("/").hasRole("EMPLOYEE")
+                                .requestMatchers("/").hasAnyRole("EMPLOYEE","DOCENTE","PRECEPTOR")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form ->

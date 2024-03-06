@@ -47,4 +47,14 @@ public class TeacherServiceImpl implements TeacherService {
     public void deleteById(int theId) {
         teacherRepository.deleteById(theId);
     }
+
+    @Override
+    public List<Teacher> findAllActiveTeachers() {
+        return teacherRepository.findAllByIsActiveTrue();
+    }
+
+    @Override
+    public Teacher findByUsername(String username) {
+        return teacherRepository.findByUsername(username).orElse(null);
+    }
 }

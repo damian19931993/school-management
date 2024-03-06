@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Preceptor</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Crear Preceptor</h2>
+    <form action="#" th:action="@{/assistant/save}" th:object="${assistant}" method="post">
+        <!-- Campos existentes -->
+        <div class="form-group">
+            <label for="firstName">Nombre</label>
+            <input type="text" id="firstName" th:field="*{firstName}" class="form-control" placeholder="Nombre" required>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Apellido</label>
+            <input type="text" id="lastName" th:field="*{lastName}" class="form-control" placeholder="Apellido" required>
+        </div>
+        <div class="form-group">
+            <label for="dni">DNI</label>
+            <input type="text" id="dni" th:field="*{dni}" class="form-control" placeholder="DNI" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Teléfono</label>
+            <input type="text" id="phone" th:field="*{phone}" class="form-control" placeholder="Teléfono">
+        </div>
+        <div class="form-group">
+            <label for="startDate">Fecha de Alta</label>
+            <input type="date" id="startDate" th:field="*{startDate}" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="endDate">Fecha de Cese:</label>
+            <input type="date" class="form-control" id="endDate" th:field="*{endDate}" placeholder="Ingrese la fecha de cese">
+        </div>
+
+        <!-- Campo activo -->
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" value="true" id="isActive" th:field="*{isActive}">
+            <label class="form-check-label" for="isActive">
+                Activo
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

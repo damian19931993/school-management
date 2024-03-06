@@ -48,6 +48,12 @@ public class SchoolSubjectServiceImpl implements SchoolSubjectService {
     public void deleteById(int theId) {
         schoolSubjectRepository.deleteById(theId);
     }
+
+    @Override
+    public List<SchoolSubject> findActiveSubjectsByCourse(int courseId) {
+        // Asumiendo que el campo que indica si una materia está activa se llama 'isActive' y es de tipo Boolean
+        return schoolSubjectRepository.findByCourseIdAndIsActive(courseId, true);
+    }
 }
 
-// Similar implementations for TeacherServiceImpl and TeacherSubjectsServiceImpl
+

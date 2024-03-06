@@ -9,4 +9,7 @@ public interface SchoolSubjectService {
     SchoolSubject findById(int id);
     void save(SchoolSubject schoolSubject);
     void deleteById(int id);
+
+     List<SchoolSubject> findActiveSubjectsByCourse(int courseId);
+
 }

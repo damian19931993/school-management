@@ -22,6 +22,10 @@ public class SchoolSubject {
     @OneToMany(mappedBy = "schoolSubject")
     private Set<TeacherSubjects> teacherSubjects = new HashSet<>();
 
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    private Course course;
+
     public SchoolSubject() {
     }
 
@@ -61,5 +65,13 @@ public class SchoolSubject {
 
     public void setTeacherSubjects(Set<TeacherSubjects> teacherSubjects) {
         this.teacherSubjects = teacherSubjects;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 }

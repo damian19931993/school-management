@@ -5,6 +5,7 @@ import com.schoolmanagement.com.schoolmanagement.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,5 +31,14 @@ public class StudentServiceImpl implements StudentService{
     @Override
     public Student findByDni(String dni) {
         return studentRepository.findByDni(dni);
+    }
+
+    @Override
+    public List<Student> findAllActiveStudents() {
+        return studentRepository.findByIsActive(true);
+    }
+
+    public List<Student> findStudentsByCourseId(Integer courseId) {
+        return studentRepository.findByCourseId(courseId);
     }
 }

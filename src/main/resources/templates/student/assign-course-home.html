@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Asignar Cursos a Estudiantes</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Asignar Cursos a Estudiantes</h2>
+
+    <!-- Buscador -->
+    <div class="search-bar mb-4">
+        <form th:action="@{/students/search}" method="get">
+            <div class="input-group">
+                <input type="text" name="searchQuery" class="form-control" placeholder="Buscar estudiante por DNI, nombre, etc...">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Lista de estudiantes -->
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th>Nombre</th>
+            <th>DNI</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.firstName} + ' ' + ${student.lastName}"></td>
+            <td th:text="${student.dni}"></td>
+            <td>
+                <a th:href="@{/student/assignCourse/{id}(id=${student.id})}" class="btn btn-primary btn-sm">Asignar Curso</a>
+                <a th:href="@{/course/update/{id}(id=${student.id})}" class="btn btn-warning btn-sm">Actualizar Curso</a>
+                <a th:href="@{/course/delete/{id}(id=${student.id})}" class="btn btn-danger btn-sm">Eliminar Curso</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS y dependencias -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

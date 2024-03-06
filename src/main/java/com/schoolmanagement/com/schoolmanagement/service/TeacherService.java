@@ -9,4 +9,8 @@ public interface TeacherService {
     Teacher findById(int id);
     void save(Teacher teacher);
     void deleteById(int id);
+    List<Teacher> findAllActiveTeachers();
+    Teacher findByUsername(String username);
+
+
 }

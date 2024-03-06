@@ -38,6 +38,13 @@ public class Teacher {
     @OneToMany(mappedBy = "teacher")
     private Set<TeacherSubjects> teacherSubjects = new HashSet<>();
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    @ManyToMany(mappedBy = "teachers")
+    private Set<Course> courses = new HashSet<>();
+
     public Teacher() {
     }
 
@@ -120,5 +127,27 @@ public class Teacher {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void addCourse(Course course) {
+        this.courses.add(course);
+        course.getTeachers().add(this);
+    }
+
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 }
