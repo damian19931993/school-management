@@ -2,44 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Mis Cursos</title>
+    <title>Mis Cursos Activos</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Gestión Escolar</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="/teacher">Inicio <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/teacher/myCourses">Mis Cursos</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-<div class="container mt-3">
-    <h2>Mis Cursos</h2>
-    <div class="list-group">
-        <th:block th:each="course : ${activeCourses}">
-            <a th:href="@{/teacher/courseStudents/{id}(id=${course.id})}" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1" th:text="${course.grade} + '° ' + ${course.division} + ' - ' + ${course.orientation}"></h5>
-                    <small>Turno: <span th:text="${course.shift}"></span></small>
-                </div>
-                <p class="mb-1">Materias asignadas:</p>
+<div class="container mt-5">
+    <h2>Mis Cursos Activos</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Curso</th>
+            <th>Grado</th>
+            <th>División</th>
+            <th>Materia</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Itera sobre cada entrada del mapa -->
+        <tr th:each="entry : ${courseSubjectsMap}">
+            <td th:text="${entry.key.grade} + ' ' + ${entry.key.division} + ' - ' + ${entry.key.orientation}"></td>
+            <td th:text="${entry.key.grade}"></td>
+            <td th:text="${entry.key.division}"></td>
+            <!-- Para la columna de materias, necesitamos otro loop interno -->
+            <td>
                 <ul>
-                    <li th:each="subject : ${course.subjects}" th:text="${subject.name}"></li>
+                    <!-- Itera sobre cada materia en la lista para el curso actual -->
+                    <li th:each="subject : ${entry.value}" th:text="${subject.subjectName}"></li>
                 </ul>
-            </a>
-        </th:block>
-    </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

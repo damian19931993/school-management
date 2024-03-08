@@ -1,6 +1,7 @@
 package com.schoolmanagement.com.schoolmanagement.service;
 
 import com.schoolmanagement.com.schoolmanagement.dao.TeacherRepository;
+import com.schoolmanagement.com.schoolmanagement.entity.SchoolSubject;
 import com.schoolmanagement.com.schoolmanagement.entity.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class TeacherServiceImpl implements TeacherService {
     public TeacherServiceImpl(TeacherRepository teacherRepository) {
         this.teacherRepository = teacherRepository;
     }
+
+
+
 
     @Override
     public List<Teacher> findAll() {
@@ -57,4 +61,7 @@ public class TeacherServiceImpl implements TeacherService {
     public Teacher findByUsername(String username) {
         return teacherRepository.findByUsername(username).orElse(null);
     }
+
+
 }
+

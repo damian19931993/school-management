@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("/assistant")
@@ -36,6 +34,9 @@ public class AssistantController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    SchoolSubjectService schoolSubjectService;
 
     @GetMapping("")
     public String listAssistants(Model theModel) {
@@ -146,19 +147,44 @@ public class AssistantController {
             return "error"; // O redirigir a una página de error o formulario adecuado
         }
     }
-
-
     @GetMapping("/myCourses")
-    public String myCourses(Model model, Principal principal) {
+    public String Courses(Model model, Principal principal) {
+        // Obtén el nombre de usuario del preceptor desde el Principal
         String username = principal.getName();
-        Optional<Assistant> assistantOptional = assistantService.findByUsername(username);
-        assistantOptional.ifPresent(assistant -> {
-            // Aquí debes ajustar cómo obtienes los cursos activos para el assistant
-            List<Course> activeCourses = assistantService.findActiveCoursesByAssistantUsername(username); // Este método debe ser creado o ajustado según tu modelo
-            model.addAttribute("activeCourses", activeCourses);
-        });
-        return "assistant/assistant"; // Asegúrate de tener la vista correcta
+
+        // Encuentra al preceptor por su username (esto podría requerir un método en tu servicio)
+        Optional<Assistant> optionalAssistant= assistantService.findByUsername(username);
+
+        if (optionalAssistant.isPresent()) {
+            Assistant assistant = optionalAssistant.get();
+            List<Course> activeCourses = courseService.findActiveCoursesByAssistant(assistant.getId());
+
+            // Para cada curso, encuentra sus materias activas y añádelas a un Map o una estructura similar
+            Map<Course, List<SchoolSubject>> coursesWithSubjects = new HashMap<>();
+            for (Course course : activeCourses) {
+                List<SchoolSubject> activeSubjects = schoolSubjectService.findActiveSubjectsByCourse(course.getId());
+                coursesWithSubjects.put(course, activeSubjects);
+            }
+
+            model.addAttribute("coursesWithSubjects", coursesWithSubjects);
+        }
+
+        return "assistant/assistant"; // Asegúrate de tener una plantilla Thymeleaf correspondiente
     }
+
+    @GetMapping("/courseStudents/{courseId}")
+    public String listStudentsByCourse(@PathVariable("courseId") Integer courseId, Model model) {
+        // Buscar los alumnos asociados al curso con el ID proporcionado
+        List<Student> students = studentService.findStudentsByCourseId(courseId);
+
+        // Agregar la lista de estudiantes al modelo para que pueda ser accesible en la vista
+        model.addAttribute("students", students);
+
+        // Nombre del archivo HTML de la vista (dentro de src/main/resources/templates)
+        return "assistant/list-students";
+    }
+
+
 
 
 }

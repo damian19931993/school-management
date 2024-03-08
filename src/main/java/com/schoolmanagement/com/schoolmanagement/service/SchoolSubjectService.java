@@ -11,5 +11,12 @@ public interface SchoolSubjectService {
     void deleteById(int id);
 
      List<SchoolSubject> findActiveSubjectsByCourse(int courseId);
+    List<SchoolSubject> findAllActiveSubjects();
+
+    List<SchoolSubject> findSubjectsByTeacherAndCourse(int teacherId, int courseId);
+
+
+
+
 
 }

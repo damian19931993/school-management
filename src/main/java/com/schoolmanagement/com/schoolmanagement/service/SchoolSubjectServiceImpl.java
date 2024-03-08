@@ -54,6 +54,17 @@ public class SchoolSubjectServiceImpl implements SchoolSubjectService {
         // Asumiendo que el campo que indica si una materia está activa se llama 'isActive' y es de tipo Boolean
         return schoolSubjectRepository.findByCourseIdAndIsActive(courseId, true);
     }
+
+    @Override
+    public List<SchoolSubject> findAllActiveSubjects() {
+        return schoolSubjectRepository.findByIsActiveTrue();
+    }
+
+    @Override
+    public List<SchoolSubject> findSubjectsByTeacherAndCourse(int teacherId, int courseId) {
+        return schoolSubjectRepository.findSubjectsByTeacherAndCourse(teacherId, courseId);
+    }
+
 }
 
 

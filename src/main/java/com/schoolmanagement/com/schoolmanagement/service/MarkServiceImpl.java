@@ -1,7 +1,7 @@
 package com.schoolmanagement.com.schoolmanagement.service;
 
 import com.schoolmanagement.com.schoolmanagement.dao.MarkRepository;
-import com.schoolmanagement.com.schoolmanagement.entity.Mark;
+import com.schoolmanagement.com.schoolmanagement.entity.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +36,18 @@ public class MarkServiceImpl implements MarkService {
     @Override
     public List<MarkRepository> findActiveMarksByStudentId(int studentId) {
         return markRepository.findActiveMarksByStudentId(studentId);
+    }
+
+    @Override
+    public void createOrUpdateMark(Student student, Course course, Teacher teacher, SchoolSubject subject) {
+        Mark mark = new Mark();
+        // Asignación directa de la entidad completa
+        mark.setStudent(student);
+        mark.setCourse(course);
+        mark.setTeacher(teacher);
+        mark.setSubject(subject);
+
+        markRepository.save(mark);
     }
 }
 

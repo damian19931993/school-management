@@ -32,6 +32,7 @@
             <th>División</th>
             <th>Orientación</th>
             <th>Detalle</th>
+            <th>Acciones</th>
         </tr>
         </thead>
         <tbody>
@@ -42,6 +43,10 @@
             <td th:text="${course.orientation}"></td>
             <td>
                 <a th:href="@{/course/details/{id}(id=${course.id})}" class="btn btn-info btn-sm">Detalle</a>
+            </td>
+            <td>
+                <a th:href="@{/course/assignSubjects/{id}(id=${course.id})}" class="btn btn-warning btn-sm">Asignar Materias</a>
+
             </td>
         </tr>
         </tbody>

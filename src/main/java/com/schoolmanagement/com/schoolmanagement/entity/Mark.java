@@ -38,6 +38,18 @@ public class Mark {
     @Column(name = "is_active")
     private boolean isActive;
 
+    public Mark() {
+    }
+
+    public Mark(String studentValue, Date gradeDate, Student student, SchoolSubject subject, Teacher teacher, Course course, boolean isActive) {
+        this.studentValue = studentValue;
+        this.gradeDate = gradeDate;
+        this.student = student;
+        this.subject = subject;
+        this.teacher = teacher;
+        this.course = course;
+        this.isActive = isActive;
+    }
     // Getters and setters
 
     public int getId() {
@@ -103,4 +115,5 @@ public class Mark {
     public void setActive(boolean active) {
         isActive = active;
     }
+
 }

@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/teacher")
@@ -24,8 +23,6 @@ public class TeacherController {
     @Autowired
     SchoolSubjectService schoolSubjectService;
 
-    @Autowired
-    TeacherSubjectsService teacherSubjectsService;
 
     @Autowired
     AuthorityService authorityService;
@@ -38,6 +35,13 @@ public class TeacherController {
 
     @Autowired
     StudentService studentService;
+
+    @Autowired
+    MarkService markService;
+
+
+    @Autowired
+    TeacherSubjectService teacherSubjectService;
     @GetMapping("")
     public String home(Model model) {
         List<Teacher> teachers = teacherService.findAllActiveTeachers();
@@ -84,20 +88,26 @@ public class TeacherController {
     @PostMapping("/saveAssignment")
     public String assignSubject(@RequestParam("teacherId") int teacherId,
                                 @RequestParam("subjectId") int subjectId,
+                                @RequestParam(value = "courseId", required = false) Integer courseId, // Opcional, dependiendo de si siempre se asigna una materia con un curso específico
                                 RedirectAttributes redirectAttributes) {
         Teacher teacher = teacherService.findById(teacherId);
         SchoolSubject subject = schoolSubjectService.findById(subjectId);
+        Course course = null;
+        if (courseId != null) {
+            course = courseService.findById(courseId);
+        }
 
         if (teacher != null && subject != null) {
-            TeacherSubjectsId id = new TeacherSubjectsId(teacherId, subjectId);
             TeacherSubjects teacherSubjects = new TeacherSubjects();
 
-            teacherSubjects.setId(id);
             teacherSubjects.setTeacher(teacher);
             teacherSubjects.setSchoolSubject(subject);
-            teacherSubjects.setActive(true); // Asumiendo que quieres activar esta asignación por defecto
+            teacherSubjects.setActive(true); // Activar esta asignación por defecto
+            if (course != null) {
+                teacherSubjects.setCourse(course); // Asignar curso si está presente
+            }
 
-            teacherSubjectsService.save(teacherSubjects);
+            teacherSubjectService.save(teacherSubjects);
 
             redirectAttributes.addFlashAttribute("success", "Materia asignada correctamente.");
         } else {
@@ -107,21 +117,6 @@ public class TeacherController {
         return "redirect:/teacher/showAssignmentPage"; // Asumiendo que tienes una vista que lista las asignaciones
     }
 
-    @GetMapping("/deleteAssignment")
-    public String deleteAssignment(@RequestParam("teacherId") int teacherId, @RequestParam("subjectId") int subjectId, RedirectAttributes redirectAttributes) {
-        teacherSubjectsService.deleteAssignment(teacherId, subjectId);
-        redirectAttributes.addFlashAttribute("success", "Asignación eliminada correctamente.");
-        return "redirect:/teacher/showAssignmentPage";
-    }
-
-    @GetMapping("/showDeleteAssignmentForm/{teacherId}")
-    public String showDeleteAssignmentPage(@PathVariable int teacherId, Model model) {
-        // Buscar las asignaciones de materias para el profesor específico
-        List<TeacherSubjects> assignments = teacherSubjectsService.findAssignmentsByTeacherId(teacherId);
-        model.addAttribute("assignments", assignments);
-        model.addAttribute("teacherId", teacherId);
-        return "teacher/delete-assignment-form";
-    }
 
     @GetMapping("/showAssignRole")
     public String listActiveTeachers(Model model) {
@@ -167,17 +162,6 @@ public class TeacherController {
         }
     }
 
-    @GetMapping("/myCourses")
-    public String myCourses(Model model, Principal principal) {
-        String username = principal.getName();
-        Teacher teacher = teacherService.findByUsername(username);
-        if (teacher != null) {
-            // Asume que tienes un método para encontrar cursos activos por profesor
-            Set<Course> activeCourses = teacher.getCourses(); // Modifica esto según cómo manejes los cursos activos
-            model.addAttribute("activeCourses", activeCourses);
-        }
-        return "teacher/course";
-    }
 
     @GetMapping("/showAssignCourseForm/{teacherId}")
     public String showAssignCoursesForm(@PathVariable("teacherId") int teacherId, Model model) {
@@ -219,13 +203,39 @@ public class TeacherController {
             return "redirect:/errorPage"; // O cualquier otro manejo que prefieras
         }
     }
-    @GetMapping("/courseStudents/{id}")
-    public String courseStudents(@PathVariable("id") int courseId, Model model) {
-        // Suponiendo que tengas un servicio que pueda obtener los estudiantes por el ID del curso
-        List<Student> students = studentService.findStudentsByCourseId(courseId);
-        model.addAttribute("students", students);
-        return "teacher/students"; // Nombre del archivo HTML que mostrará la lista de estudiantes
+    @GetMapping("/myCourses")
+    public String showMyTeachingCourses(Model model, Principal principal) {
+        String username = principal.getName();
+        Teacher teacher = teacherService.findByUsername(username);
+
+        if (teacher != null) {
+            // Filtrar solo cursos activos del docente.
+            Set<Course> activeCourses = teacher.getCourses().stream()
+                    .filter(Course::getIsActive)
+                    .collect(Collectors.toSet());
+
+            // Aquí asumimos que tienes un servicio o método para obtener las materias activas por curso y docente.
+            Map<Course, List<SchoolSubject>> courseSubjectsMap = new HashMap<>();
+
+            for (Course course : activeCourses) {
+                List<SchoolSubject> subjects = schoolSubjectService.findSubjectsByTeacherAndCourse(teacher.getId(), course.getId());
+                // Aquí también deberías asegurarte de que las materias que agregas al mapa sean activas, si es necesario.
+                courseSubjectsMap.put(course, subjects);
+
+                // Imprimir por consola las materias activas asignadas al docente para este curso
+                System.out.println("Curso: " + course.getGrade() + " " + course.getDivision() + " - " + course.getOrientation());
+                for (SchoolSubject subject : subjects) {
+                    System.out.println("Materia: " + subject.getSubjectName());
+                }
+            }
+
+            model.addAttribute("courseSubjectsMap", courseSubjectsMap);
+        }
+
+        return "teacher/course";
     }
+
+
 
 
 }

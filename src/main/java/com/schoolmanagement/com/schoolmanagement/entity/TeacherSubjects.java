@@ -6,22 +6,27 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "teacher_subjects")
 public class TeacherSubjects {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private int id;
     @ManyToOne
-    @JoinColumn(name = "teacher_id", insertable = false, updatable = false)
-    @MapsId("teacherId")
+    @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
 
     @ManyToOne
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
-    @MapsId("subjectId")
     private SchoolSubject schoolSubject;
 
     @Column(name = "is_active")
     private boolean isActive;
 
-    @EmbeddedId
-    private TeacherSubjectsId id;
+
+    @ManyToOne
+    @JoinColumn(name = "course_id", referencedColumnName = "id")
+    private Course course;
 
     public TeacherSubjects() {
     }
@@ -56,11 +61,19 @@ public class TeacherSubjects {
         isActive = active;
     }
 
-    public TeacherSubjectsId getId() {
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(TeacherSubjectsId id) {
+    public void setId(int id) {
         this.id = id;
     }
 }
