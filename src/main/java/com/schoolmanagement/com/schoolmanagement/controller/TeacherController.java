@@ -3,13 +3,18 @@ package com.schoolmanagement.com.schoolmanagement.controller;
 import com.schoolmanagement.com.schoolmanagement.entity.*;
 import com.schoolmanagement.com.schoolmanagement.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -71,7 +76,7 @@ public class TeacherController {
 
     @GetMapping("/showAssignmentPage")
     public String showAssignmentPage(Model model) {
-        List<Teacher> allTeachers = teacherService.findAll();
+        List<Teacher> allTeachers = teacherService.findAllActiveTeachers();
         model.addAttribute("teachers", allTeachers);
         return "teacher/assign-subject-home"; //
     }
@@ -80,8 +85,10 @@ public class TeacherController {
     public String showAssignSubjectForm(@PathVariable("teacherId") int teacherId, Model model) {
         Teacher teacher = teacherService.findById(teacherId);
         List<SchoolSubject> subjects = schoolSubjectService.findAll();
+        List<Course> courses = courseService.findAllActiveCourses();
         model.addAttribute("teacher", teacher);
         model.addAttribute("subjects", subjects);
+        model.addAttribute("courses", courses);
         return "teacher/assign-subject-form";
     }
 
@@ -203,36 +210,77 @@ public class TeacherController {
             return "redirect:/errorPage"; // O cualquier otro manejo que prefieras
         }
     }
-    @GetMapping("/myCourses")
-    public String showMyTeachingCourses(Model model, Principal principal) {
+    @GetMapping("/courses")
+    public String showTeacherCourses(Model model, Principal principal) {
         String username = principal.getName();
         Teacher teacher = teacherService.findByUsername(username);
-
-        if (teacher != null) {
-            // Filtrar solo cursos activos del docente.
-            Set<Course> activeCourses = teacher.getCourses().stream()
-                    .filter(Course::getIsActive)
-                    .collect(Collectors.toSet());
-
-            // Aquí asumimos que tienes un servicio o método para obtener las materias activas por curso y docente.
-            Map<Course, List<SchoolSubject>> courseSubjectsMap = new HashMap<>();
-
-            for (Course course : activeCourses) {
-                List<SchoolSubject> subjects = schoolSubjectService.findSubjectsByTeacherAndCourse(teacher.getId(), course.getId());
-                // Aquí también deberías asegurarte de que las materias que agregas al mapa sean activas, si es necesario.
-                courseSubjectsMap.put(course, subjects);
-
-                // Imprimir por consola las materias activas asignadas al docente para este curso
-                System.out.println("Curso: " + course.getGrade() + " " + course.getDivision() + " - " + course.getOrientation());
-                for (SchoolSubject subject : subjects) {
-                    System.out.println("Materia: " + subject.getSubjectName());
-                }
-            }
-
-            model.addAttribute("courseSubjectsMap", courseSubjectsMap);
-        }
-
+        List<Course> activeCourses = teacherService.findAllActiveCourses(teacher);
+        List<SchoolSubject> activeSubjects = schoolSubjectService.findActiveSubjectsByTeacher(teacher);
+        model.addAttribute("activeCourses", activeCourses);
+        model.addAttribute("activeSubjects",activeSubjects);
+        model.addAttribute("teacher", teacher);
         return "teacher/course";
+    }
+    @GetMapping("/courseDetails/{courseId}")
+    public String showCourseDetails(@PathVariable("courseId") int courseId, Model model) {
+        Course course = courseService.findById(courseId);
+        if (course != null) {
+            List<Student> activeStudents = studentService.findActiveStudentsByCourse(course);
+            model.addAttribute("course", course);
+            model.addAttribute("activeStudents", activeStudents);
+        }
+        return "teacher/students";
+    }
+    @GetMapping("/showMarkHome/{courseId}/{subjectId}")
+    public String gradesHome(@PathVariable int courseId, @PathVariable int subjectId, Model model, Principal principal) {
+        String username = principal.getName();
+        Teacher teacher = teacherService.findByUsername(username);
+        Course course = courseService.findById(courseId);
+        SchoolSubject subject = schoolSubjectService.findById(subjectId);
+        List<Student> students = studentService.findActiveStudentsByCourse(course);
+        model.addAttribute("course", course);
+        model.addAttribute("subject", subject);
+        model.addAttribute("students", students);
+
+        return "teacher/mark/home";
+    }
+
+    @GetMapping("/addMark/{courseId}/{subjectId}/{studentId}")
+    public String showAddGradeForm(@PathVariable int courseId, @PathVariable int subjectId, @PathVariable int studentId, Model model, Principal principal) {
+        String username = principal.getName();
+        Teacher teacher = teacherService.findByUsername(username);
+        Mark mark = new Mark();
+        Course course = courseService.findById(courseId);
+        SchoolSubject subject = schoolSubjectService.findById(subjectId);
+        Student student = studentService.findById2(studentId);
+        mark.setCourse(course);
+        mark.setSubject(subject);
+        mark.setStudent(student);
+        mark.setTeacher(teacher);
+        model.addAttribute("mark", mark);
+        model.addAttribute("student",student);
+        model.addAttribute("subject",subject);
+        model.addAttribute("teacher",teacher);
+        model.addAttribute("course",course);
+        model.addAttribute("courseId",course.getId());
+        return "teacher/mark/form";
+    }
+
+    @PostMapping("/saveMark")
+    public String processAddGradeForm(@ModelAttribute Mark mark, RedirectAttributes redirectAttributes) {
+        // Aquí asumimos que tienes un servicio para guardar la calificación
+        markService.saveMark(mark);
+        redirectAttributes.addAttribute("courseId", mark.getCourse().getId());
+        redirectAttributes.addAttribute("subjectId", mark.getSubject().getId());
+        return "redirect:/teacher/showMarkHome/{courseId}/{subjectId}"; // Redirige a donde quieras después de guardar la calificación
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        // El segundo parámetro a 'true' permite nulo
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 
 

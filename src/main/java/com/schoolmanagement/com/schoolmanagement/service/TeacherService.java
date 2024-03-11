@@ -1,8 +1,10 @@
 package com.schoolmanagement.com.schoolmanagement.service;
 
+import com.schoolmanagement.com.schoolmanagement.entity.Course;
 import com.schoolmanagement.com.schoolmanagement.entity.SchoolSubject;
 import com.schoolmanagement.com.schoolmanagement.entity.Teacher;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface TeacherService {
@@ -13,7 +15,8 @@ public interface TeacherService {
     List<Teacher> findAllActiveTeachers();
     Teacher findByUsername(String username);
 
+    int findTeacherIdByPrincipal(Principal principal);
 
-
+    List<Course> findAllActiveCourses(Teacher teacher);
 
 }

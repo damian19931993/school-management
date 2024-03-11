@@ -17,6 +17,16 @@
             <input type="checkbox" class="form-check-input" id="isActive" th:field="*{active}">
             <label class="form-check-label" for="isActive">Activa</label>
         </div>
+        <div>
+            <select class="form-control" id="course" th:field="*{course}">
+                <option value="">Selecciona un curso</option>
+                <option th:each="course : ${activeCourses}"
+                        th:value="${course.id}"
+                        th:text="${course.grade} + ' ' + ${course.division}">
+                </option>
+            </select>
+
+        </div>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>

@@ -19,4 +19,11 @@ public class TeacherSubjectServiceImpl implements TeacherSubjectService {
         return teacherSubjectRepository.save(teacherSubjects);
     }
 
+    @Override
+    public List<TeacherSubjects> findActiveAssignmentsByTeacher(int teacherId) {
+        return teacherSubjectRepository.findActiveByTeacherId(teacherId);
+    }
+
+
+
 }

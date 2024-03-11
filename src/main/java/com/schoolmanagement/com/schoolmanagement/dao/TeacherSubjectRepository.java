@@ -23,4 +23,7 @@ public interface TeacherSubjectRepository extends JpaRepository<TeacherSubjects,
     @Query("SELECT ts FROM TeacherSubjects ts WHERE ts.teacher.id = :teacherId AND ts.schoolSubject.id = :subjectId")
     TeacherSubjects findByTeacherIdAndSubjectId(@Param("teacherId") int teacherId, @Param("subjectId") int subjectId);
 
+    @Query("SELECT ts FROM TeacherSubjects ts WHERE ts.teacher.id = :teacherId AND ts.isActive = true")
+    List<TeacherSubjects> findActiveByTeacherId(@Param("teacherId") int teacherId);
+
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home de Calificaciones</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Calificaciones - Curso: <span th:text="${course.grade} + ' ' + ${course.division}"></span> - Materia: <span th:text="${subject.subjectName}"></span></h2>
+    <div class="list-group">
+        <div th:each="student : ${students}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <span th:text="${student.firstName} + ' ' + ${student.lastName}"></span>
+            <div>
+                <a th:href="@{/teacher/addMark/{courseId}/{subjectId}/{studentId}(courseId=${course.id},subjectId=${subject.id},studentId=${student.id})}" class="btn btn-primary btn-sm">Agregar Calificación</a>
+                <a href="@{/grades/view/{courseId}/{subjectId}/{studentId}(courseId=${course.id},subjectId=${subject.id},studentId=${student.id})}" class="btn btn-info btn-sm">Ver Calificaciones</a>
+                <a href="@{/grades/edit/{courseId}/{subjectId}/{studentId}(courseId=${course.id},subjectId=${subject.id},studentId=${student.id})}" class="btn btn-warning btn-sm">Modificar Calificación</a>
+                <a href="@{/grades/delete/{courseId}/{subjectId}/{studentId}(courseId=${course.id},subjectId=${subject.id},studentId=${student.id})}" class="btn btn-danger btn-sm">Eliminar Calificación</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

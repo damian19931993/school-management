@@ -18,4 +18,5 @@ public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
     Optional<Teacher> findByUsername(@Param("username") String username);
 
 
+
 }

@@ -2,21 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Detalle del Curso</title>
-    <!-- Incluir CSS de Bootstrap -->
+    <title>Detalles del Curso</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container mt-3">
-    <h2>Detalle del Curso: <span th:text="${course.grade}"></span></h2>
-    <div>
-        <h3>Alumnos Activos</h3>
-        <ul class="list-group">
-            <li class="list-group-item" th:each="student : ${activeStudents}">
-                <span th:text="${student.firstName}"></span>
-            </li>
+<div class="container mt-5">
+    <h2>Detalles del Curso</h2>
+    <p>Curso: <span th:text="${course.grade} + ' ' + ${course.division}"></span></p>
+    <h3>Estudiantes Activos</h3>
+    <div th:if="${activeStudents.empty}">
+        <p>No hay estudiantes activos en este curso.</p>
+    </div>
+    <div th:if="!${activeStudents.empty}">
+        <ul>
+            <li th:each="student : ${activeStudents}" th:text="${student.firstName}"></li>
         </ul>
     </div>
+    <a href="/teacher/courses" class="btn btn-primary">Volver a la lista de cursos</a>
 </div>
-<!-- Incluir scripts de JS de Bootstrap -->
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

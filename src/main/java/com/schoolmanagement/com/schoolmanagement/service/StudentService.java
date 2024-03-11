@@ -1,9 +1,11 @@
 package com.schoolmanagement.com.schoolmanagement.service;
 
+import com.schoolmanagement.com.schoolmanagement.entity.Course;
 import com.schoolmanagement.com.schoolmanagement.entity.Student;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface StudentService {
 
@@ -19,5 +21,9 @@ public interface StudentService {
 
     List<Student> findStudentsByCourseId(Integer courseId);
 
+
+    Student findById2(int studentId);
+
+    List<Student> findActiveStudentsByCourse(Course course);
 
 }

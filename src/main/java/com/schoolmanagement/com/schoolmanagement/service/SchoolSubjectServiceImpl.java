@@ -2,6 +2,7 @@ package com.schoolmanagement.com.schoolmanagement.service;
 
 import com.schoolmanagement.com.schoolmanagement.dao.SchoolSubjectRepository;
 import com.schoolmanagement.com.schoolmanagement.entity.SchoolSubject;
+import com.schoolmanagement.com.schoolmanagement.entity.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -63,6 +64,11 @@ public class SchoolSubjectServiceImpl implements SchoolSubjectService {
     @Override
     public List<SchoolSubject> findSubjectsByTeacherAndCourse(int teacherId, int courseId) {
         return schoolSubjectRepository.findSubjectsByTeacherAndCourse(teacherId, courseId);
+    }
+
+    @Override
+    public List<SchoolSubject> findActiveSubjectsByTeacher(Teacher teacher) {
+        return schoolSubjectRepository.findActiveByTeacher(teacher);
     }
 
 }

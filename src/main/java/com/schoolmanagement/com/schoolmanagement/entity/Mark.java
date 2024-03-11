@@ -1,7 +1,8 @@
 package com.schoolmanagement.com.schoolmanagement.entity;
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.sql.Date;
 
 
 @Entity
@@ -10,13 +11,13 @@ public class Mark {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private int id;
 
     @Column(name = "student_value")
     private String studentValue;
 
     @Column(name = "grade_date")
-    @Temporal(TemporalType.DATE)
     private Date gradeDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

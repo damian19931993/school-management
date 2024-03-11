@@ -9,4 +9,8 @@ public interface TeacherSubjectService {
 
     TeacherSubjects save(TeacherSubjects teacherSubjects);
 
+    List<TeacherSubjects> findActiveAssignmentsByTeacher(int teacherId);
+
+
+
 }

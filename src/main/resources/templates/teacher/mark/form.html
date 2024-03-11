@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agregar Calificación</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Agregar Calificación para <span th:text="${student.firstName} + ' ' + ${student.lastName}"></span></h2>
+    <form th:action="@{/teacher/saveMark}" th:object="${mark}" method="post">
+        <div class="form-group">
+            <label for="studentName">Estudiante</label>
+            <input type="text" id="studentName" th:value="${student.firstName} + ' ' + ${student.lastName}" class="form-control" readonly>
+        </div>
+        <div class="form-group">
+            <label for="studentValue">Calificación</label>
+            <input type="text" id="studentValue" th:field="*{studentValue}" class="form-control" placeholder="Calificación del Estudiante">
+        </div>
+        <div class="form-group">
+            <label for="gradeDate">Fecha de Calificación</label>
+            <input type="date" id="gradeDate" th:field="*{gradeDate}" class="form-control">
+        </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="true" id="isActive" th:field="*{active}" />
+            <label class="form-check-label" for="isActive">
+                Activo
+            </label>
+        </div>
+
+
+        <!-- Campos ocultos para mantener los IDs -->
+        <input type="hidden" th:field="*{student.id}" />
+        <input type="hidden" th:field="*{subject.id}" />
+        <input type="hidden" th:field="*{teacher.id}" />
+        <input type="hidden" th:field="*{course.id}" />
+
+        <button type="submit" class="btn btn-primary">Guardar Calificación</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

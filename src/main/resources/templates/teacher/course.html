@@ -2,41 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Mis Cursos Activos</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Cursos del Docente</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container mt-5">
-    <h2>Mis Cursos Activos</h2>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Curso</th>
-            <th>Grado</th>
-            <th>División</th>
-            <th>Materia</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Itera sobre cada entrada del mapa -->
-        <tr th:each="entry : ${courseSubjectsMap}">
-            <td th:text="${entry.key.grade} + ' ' + ${entry.key.division} + ' - ' + ${entry.key.orientation}"></td>
-            <td th:text="${entry.key.grade}"></td>
-            <td th:text="${entry.key.division}"></td>
-            <!-- Para la columna de materias, necesitamos otro loop interno -->
-            <td>
-                <ul>
-                    <!-- Itera sobre cada materia en la lista para el curso actual -->
-                    <li th:each="subject : ${entry.value}" th:text="${subject.subjectName}"></li>
-                </ul>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <h2>Cursos Activos</h2>
+    <div th:each="course : ${activeCourses}">
+        <div class="row">
+            <div class="col-md-4">
+                <p>Curso: <span th:text="${course.grade} + ' ' + ${course.division}"></span></p>
+            </div>
+            <div class="col-md-4">
+                <p>Materia:
+                    <span th:each="subject : ${activeSubjects}">
+                        <span th:if="${subject.course.id == course.id}" th:text="${subject.subjectName}"></span>
+                    </span>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <!-- Botones -->
+                <a th:href="@{/teacher/courseDetails/{courseId}(courseId=${course.id})}" class="btn btn-info btn-sm">Detalles</a>
+
+                <span th:each="subject : ${activeSubjects}">
+                     <a th:if="${subject.course.id == course.id}" th:href="@{/teacher/showMarkHome/{courseId}/{subjectId}(courseId=${course.id}, subjectId=${subject.id})}" class="btn btn-primary btn-sm">Calificaciones ></a>
+                </span>
+
+
+            </div>
+        </div>
+    </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,10 +1,14 @@
 package com.schoolmanagement.com.schoolmanagement.service;
 
+import com.schoolmanagement.com.schoolmanagement.dao.CourseRepository;
 import com.schoolmanagement.com.schoolmanagement.dao.TeacherRepository;
+import com.schoolmanagement.com.schoolmanagement.entity.Course;
 import com.schoolmanagement.com.schoolmanagement.entity.SchoolSubject;
 import com.schoolmanagement.com.schoolmanagement.entity.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +16,11 @@ import java.util.Optional;
 public class TeacherServiceImpl implements TeacherService {
 
 
+    @Autowired
+    CourseRepository courseRepository;
     private final TeacherRepository teacherRepository;
+
+
 
     @Autowired
     public TeacherServiceImpl(TeacherRepository teacherRepository) {
@@ -62,6 +70,20 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.findByUsername(username).orElse(null);
     }
 
+    @Override
+    public int findTeacherIdByPrincipal(Principal principal) {
+        Teacher teacher = findByUsername(principal.getName());
+        if (teacher != null) {
+            return teacher.getId();
+        } else {
+            // Lanza una excepción o maneja el caso de que el profesor no se encuentre
+            throw new RuntimeException("Teacher not found");
+        }
+    }
 
+    @Override
+    public List<Course> findAllActiveCourses(Teacher teacher) {
+        return courseRepository.findAllActiveByTeacher(teacher.getId());
+    }
 }
 

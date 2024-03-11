@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MarkService {
-    Mark saveMark(Mark mark);
+    void saveMark(Mark mark);
     Optional<Mark> findMarkById(int id);
     List<Mark> findAllMarks();
     void deleteMarkById(int id);
@@ -15,4 +15,5 @@ public interface MarkService {
 
     void createOrUpdateMark(Student student, Course course, Teacher teacher, SchoolSubject subject);
 
+    void save(Mark mark);
 }

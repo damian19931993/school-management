@@ -1,12 +1,15 @@
 package com.schoolmanagement.com.schoolmanagement.service;
 
 import com.schoolmanagement.com.schoolmanagement.dao.StudentRepository;
+import com.schoolmanagement.com.schoolmanagement.entity.Course;
 import com.schoolmanagement.com.schoolmanagement.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class StudentServiceImpl implements StudentService{
@@ -40,5 +43,15 @@ public class StudentServiceImpl implements StudentService{
 
     public List<Student> findStudentsByCourseId(Integer courseId) {
         return studentRepository.findByCourseId(courseId);
+    }
+
+    @Override
+    public Student findById2(int studentId) {
+        return studentRepository.findById(studentId).orElse(null);
+    }
+
+    @Override
+    public List<Student> findActiveStudentsByCourse(Course course) {
+        return studentRepository.findByCoursesAndIsActive(course, true);
     }
 }
