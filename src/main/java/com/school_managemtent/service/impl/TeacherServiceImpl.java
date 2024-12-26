@@ -1,5 +1,4 @@
 package com.school_managemtent.service.impl;
-
 import com.school_managemtent.dto.TeacherDto;
 import com.school_managemtent.entity.Teacher;
 import com.school_managemtent.entity.User;
@@ -45,7 +44,7 @@ public class TeacherServiceImpl implements TeacherService {
         teacher.setDateOfUp(request.getDateOfUp());
         teacher.setDateOfDown(request.getDateOfDown());
         teacher.setActive(true);
-        return createTeacherUser(request.getEmail(), request.getPassword(), teacher);
+        return createTeacherUser(request.getEmail(), request.getUsername(), request.getPassword(), teacher);
     }
 
     @Override
@@ -58,10 +57,11 @@ public class TeacherServiceImpl implements TeacherService {
         return dto;
     }
 
-    private User createTeacherUser(String email, String rawPassword, Teacher teacherData) {
+    private User createTeacherUser(String email, String username,  String rawPassword, Teacher teacherData) {
         Teacher teacher = teacherRepository.save(teacherData);
         User user = new User();
         user.setEmail(email);
+        user.setUsername(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("teacher");
         user.addTeacher(teacher);

@@ -7,6 +7,7 @@ public class TeacherDto {
     private Long id;
     private String name;
     private String email;
+    private String username;
     private String password;
     private String middleName1;
     private String middleName2;
@@ -174,5 +175,13 @@ public class TeacherDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

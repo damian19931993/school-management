@@ -1,31 +1,27 @@
 package com.school_managemtent.config;
-
+import com.school_managemtent.service.impl.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+
 public class SecurityConfig {
 
-    @Bean
-    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-        UserDetails directivoUser = User.withUsername("admin")
-                .password(passwordEncoder().encode("admin")) // encriptado con BCrypt
-                .roles("DIRECTIVO")
-                .build();
+    private final MyUserDetailsService myUserDetailsService;
 
-        return new InMemoryUserDetailsManager(directivoUser);
+    public SecurityConfig(MyUserDetailsService myUserDetailsService) {
+        this.myUserDetailsService = myUserDetailsService;
     }
 
     @Bean
@@ -33,15 +29,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // Solo los usuarios con rol DIRECTIVO pueden crear y eliminar usuarios con rol teacher
-                        .requestMatchers(HttpMethod.POST, "/api/users/teacher").hasRole("DIRECTIVO")
-                        .requestMatchers(HttpMethod.DELETE, "/api/users/teacher/**").hasRole("DIRECTIVO")
-
-                        // Para obtener uno o varios usuarios teacher, se podría requerir estar logueado:
-                        .requestMatchers(HttpMethod.GET, "/api/users/teacher/**").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/api/users/teachers").authenticated()
-
-                        // Cualquier otra ruta, la configuras según tu necesidad (aquí ejemplo):
+                        .requestMatchers(HttpMethod.POST, "/api/teacher").hasRole("DIRECTIVO")
+                        .requestMatchers(HttpMethod.DELETE, "/api/teacher/**").hasRole("DIRECTIVO")
+                        .requestMatchers(HttpMethod.GET, "/api/teacher/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/teachers").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
                         .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -50,9 +42,14 @@ public class SecurityConfig {
         return http.build();
     }
 
-    /**
-     * Ejemplo de PasswordEncoder
-     */
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(myUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

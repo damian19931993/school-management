@@ -6,6 +6,7 @@ public class StudentDto {
 
     private Long id;
     private String name;
+    private String username;
     private String email;
     private String password;
     private String middleName1;
@@ -168,5 +169,13 @@ public class StudentDto {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

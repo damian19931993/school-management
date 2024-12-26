@@ -1,12 +1,9 @@
 package com.school_managemtent.service.impl;
 
 import com.school_managemtent.dto.StudentDto;
-import com.school_managemtent.dto.TeacherDto;
 import com.school_managemtent.entity.Student;
-import com.school_managemtent.entity.Teacher;
 import com.school_managemtent.entity.User;
 import com.school_managemtent.repository.StudentRepository;
-import com.school_managemtent.repository.TeacherRepository;
 import com.school_managemtent.repository.UserRepository;
 import com.school_managemtent.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +44,7 @@ public class StudentServiceImpl implements StudentService {
         student.setDateOfUp(request.getDateOfUp());
         student.setDateOfDown(request.getDateOfDown());
         student.setActive(true);
-        return createStudentUser(request.getEmail(), request.getPassword(), student);
+        return createStudentUser(request.getEmail(), request.getUsername(), request.getPassword(), student);
     }
 
     @Override
@@ -60,10 +57,11 @@ public class StudentServiceImpl implements StudentService {
         return dto;
     }
 
-    private User createStudentUser(String email, String rawPassword, Student studentData) {
+    private User createStudentUser(String email, String username, String rawPassword, Student studentData) {
         Student student = studentRepository.save(studentData);
         User user = new User();
         user.setEmail(email);
+        user.setUsername(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("student");
         user.addStudent(student);
