@@ -1,5 +1,7 @@
-package com.school_managemtent.entity;
+package com.school_managemtent.entity.relation;
 
+import com.school_managemtent.entity.Teacher;
+import com.school_managemtent.entity.User;
 import com.school_managemtent.helper.UserTeacherKey;
 import jakarta.persistence.*;
 

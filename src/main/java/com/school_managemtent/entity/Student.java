@@ -1,10 +1,13 @@
 package com.school_managemtent.entity;
 
+import com.school_managemtent.entity.relation.UserStudent;
+import com.school_managemtent.entity.relation.UserTeacher;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,8 +33,8 @@ public class Student {
     private Date dateOfDown;
     private boolean active;
 
-    @ManyToMany(mappedBy = "students")
-    private List<User> users;
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<UserStudent> userStudents = new ArrayList<>();
 
     public Student() {
     }
@@ -164,11 +167,11 @@ public class Student {
         this.active = active;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<UserStudent> getUserStudents() {
+        return userStudents;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setUserStudents(List<UserStudent> userStudents) {
+        this.userStudents = userStudents;
     }
 }

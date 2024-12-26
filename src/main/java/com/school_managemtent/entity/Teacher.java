@@ -1,4 +1,5 @@
 package com.school_managemtent.entity;
+import com.school_managemtent.entity.relation.UserTeacher;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

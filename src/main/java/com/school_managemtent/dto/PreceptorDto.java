@@ -1,23 +1,14 @@
-package com.school_managemtent.entity;
+package com.school_managemtent.dto;
 
-import com.school_managemtent.entity.relation.UserPreceptor;
-import com.school_managemtent.entity.relation.UserTeacher;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-@Entity
-public class Preceptor {
+public class PreceptorDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String email;
+    private String username;
+    private String password;
     private String middleName1;
     private String middleName2;
     private String middleName3;
@@ -34,10 +25,7 @@ public class Preceptor {
     private Date dateOfDown;
     private boolean active;
 
-    @OneToMany(mappedBy = "preceptor", cascade = CascadeType.ALL)
-    private List<UserPreceptor> userPreceptors = new ArrayList<>();
-
-    public Preceptor() {
+    public PreceptorDto() {
     }
 
     public Long getId() {
@@ -54,6 +42,30 @@ public class Preceptor {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getMiddleName1() {
@@ -174,13 +186,5 @@ public class Preceptor {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public List<UserPreceptor> getUserPreceptors() {
-        return userPreceptors;
-    }
-
-    public void setUserPreceptors(List<UserPreceptor> userPreceptors) {
-        this.userPreceptors = userPreceptors;
     }
 }
