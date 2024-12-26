@@ -9,9 +9,6 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
 public class Student {
 
     @Id
@@ -35,4 +32,143 @@ public class Student {
 
     @ManyToMany(mappedBy = "students")
     private List<User> users;
+
+    public Student() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getMiddleName1() {
+        return middleName1;
+    }
+
+    public void setMiddleName1(String middleName1) {
+        this.middleName1 = middleName1;
+    }
+
+    public String getMiddleName2() {
+        return middleName2;
+    }
+
+    public void setMiddleName2(String middleName2) {
+        this.middleName2 = middleName2;
+    }
+
+    public String getMiddleName3() {
+        return middleName3;
+    }
+
+    public void setMiddleName3(String middleName3) {
+        this.middleName3 = middleName3;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getSurname2() {
+        return surname2;
+    }
+
+    public void setSurname2(String surname2) {
+        this.surname2 = surname2;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    public Date getDateOfUp() {
+        return dateOfUp;
+    }
+
+    public void setDateOfUp(Date dateOfUp) {
+        this.dateOfUp = dateOfUp;
+    }
+
+    public Date getDateOfDown() {
+        return dateOfDown;
+    }
+
+    public void setDateOfDown(Date dateOfDown) {
+        this.dateOfDown = dateOfDown;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }

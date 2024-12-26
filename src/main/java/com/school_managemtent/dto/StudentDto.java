@@ -1,63 +1,29 @@
-package com.school_managemtent.entity;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+package com.school_managemtent.dto;
 
 import java.util.Date;
-import java.util.List;
 
-@Entity
-public class Teacher {
+public class StudentDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotBlank(message = "El nombre es obligatorio.")
-    @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres.")
     private String name;
-
+    private String email;
+    private String password;
     private String middleName1;
     private String middleName2;
     private String middleName3;
-
-    @NotBlank(message = "El apellido es obligatorio.")
-    @Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres.")
     private String surname;
     private String surname2;
-
-    @NotBlank(message = "El dni es obligatorio.")
-    @Size(max = 10, message = "El dni no puede exceder los 10 caracteres.")
-    @Column(unique = true)
     private String dni;
-
-    @NotBlank(message = "La dirección es obligatoria.")
     private String address;
-
     private String city;
     private String state;
-
-    @NotNull(message = "La fecha de nacimiento no puede ser nula.")
-    @Past(message = "La fechad de nacimiento debe ser en el pasado.")
-    @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
-
     private String nationality;
-    private String situacionDeRevista;
-
-    @Temporal(TemporalType.DATE)
     private Date dateOfUp;
-
-    @Temporal(TemporalType.DATE)
     private Date dateOfDown;
     private boolean active;
 
-    @ManyToMany(mappedBy = "teachers")
-    private List<User> users;
-
-    public Teacher() {
+    public StudentDto() {
     }
 
     public Long getId() {
@@ -74,6 +40,22 @@ public class Teacher {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getMiddleName1() {
@@ -164,14 +146,6 @@ public class Teacher {
         this.nationality = nationality;
     }
 
-    public String getSituacionDeRevista() {
-        return situacionDeRevista;
-    }
-
-    public void setSituacionDeRevista(String situacionDeRevista) {
-        this.situacionDeRevista = situacionDeRevista;
-    }
-
     public Date getDateOfUp() {
         return dateOfUp;
     }
@@ -194,13 +168,5 @@ public class Teacher {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 }

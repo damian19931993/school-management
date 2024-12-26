@@ -1,7 +1,8 @@
 package com.school_managemtent.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message = "El email es obligatorio.")
+    @Email(message = "El formato debe ser válido.")
+    @Column(unique = true)
     private String email;
+
+
     private String password;
     private String role;
 
@@ -30,7 +37,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private List<Student> students;
+    private List<Student> students = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -133,5 +140,9 @@ public class User {
 
     public void setDirectivos(List<Directivo> directivos) {
         this.directivos = directivos;
+    }
+
+    public void addStudent(Student student) {
+        students.add(student);
     }
 }
