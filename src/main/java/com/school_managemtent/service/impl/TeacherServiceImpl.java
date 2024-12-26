@@ -64,7 +64,7 @@ public class TeacherServiceImpl implements TeacherService {
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("teacher");
-        user.addTeacher(teacher);
+        user.addTeacherAssociation(teacher, true);
         return userRepository.save(user);
     }
 }

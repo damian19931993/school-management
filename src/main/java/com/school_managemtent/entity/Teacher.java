@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -54,8 +55,8 @@ public class Teacher {
     private Date dateOfDown;
     private boolean active;
 
-    @ManyToMany(mappedBy = "teachers")
-    private List<User> users;
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    private List<UserTeacher> userTeachers = new ArrayList<>();
 
     public Teacher() {
     }
@@ -196,11 +197,11 @@ public class Teacher {
         this.active = active;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<UserTeacher> getUserTeachers() {
+        return userTeachers;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setUserTeachers(List<UserTeacher> userTeachers) {
+        this.userTeachers = userTeachers;
     }
 }

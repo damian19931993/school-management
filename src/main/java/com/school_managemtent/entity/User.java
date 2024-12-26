@@ -1,5 +1,6 @@
 package com.school_managemtent.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -23,13 +24,9 @@ public class User {
     private String password;
     private String role;
 
-    @ManyToMany
-    @JoinTable(
-            name="user_teacher",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "teacher_id")
-    )
-    private List<Teacher> teachers = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<UserTeacher> userTeachers = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -63,8 +60,11 @@ public class User {
     )
     private List<Directivo> directivos;
 
-    public void addTeacher(Teacher teacher) {
-        teachers.add(teacher);
+    public void addTeacherAssociation(Teacher teacher, boolean active) {
+        UserTeacher userTeacher = new UserTeacher(this, teacher, active);
+        this.userTeachers.add(userTeacher);
+        // Opcionalmente, también lo agregas a la colección del Teacher:
+        //teacher.getUserTeachers().add(userTeacher);
     }
 
     public User() {
@@ -100,14 +100,6 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public List<Teacher> getTeachers() {
-        return teachers;
-    }
-
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
     }
 
     public List<Student> getStudents() {
@@ -152,5 +144,13 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<UserTeacher> getUserTeachers() {
+        return userTeachers;
+    }
+
+    public void setUserTeachers(List<UserTeacher> userTeachers) {
+        this.userTeachers = userTeachers;
     }
 }
