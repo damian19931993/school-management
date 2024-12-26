@@ -1,6 +1,7 @@
 package com.school_managemtent.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.school_managemtent.entity.relation.UserDirectivo;
 import com.school_managemtent.entity.relation.UserPreceptor;
 import com.school_managemtent.entity.relation.UserStudent;
 import com.school_managemtent.entity.relation.UserTeacher;
@@ -55,13 +56,9 @@ public class User {
     @JsonIgnore
     private List<UserPreceptor> userPreceptors = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_directivo",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "directivo_id")
-    )
-    private List<Directivo> directivos;
+    @OneToMany(mappedBy = "user" ,  cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<UserDirectivo> userDirectivos = new ArrayList<>();
 
     public void addTeacherAssociation(Teacher teacher, boolean active) {
         UserTeacher userTeacher = new UserTeacher(this, teacher, active);
@@ -75,9 +72,14 @@ public class User {
         this.userStudents.add(userStudent);
     }
 
-    public void addPrecptorAssociation(Preceptor preceptor, boolean active) {
+    public void addPreceptorAssociation(Preceptor preceptor, boolean active) {
         UserPreceptor userPreceptor = new UserPreceptor(this, preceptor, active);
         this.userPreceptors.add(userPreceptor);
+    }
+
+    public void addDirectivoAssociation(Directivo directivo, boolean active) {
+        UserDirectivo userDirectivo = new UserDirectivo(this, directivo, active);
+        this.userDirectivos.add(userDirectivo);
     }
 
     public User() {
@@ -129,15 +131,6 @@ public class User {
 
     public void setRelatives(List<Relative> relatives) {
         this.relatives = relatives;
-    }
-
-
-    public List<Directivo> getDirectivos() {
-        return directivos;
-    }
-
-    public void setDirectivos(List<Directivo> directivos) {
-        this.directivos = directivos;
     }
 
 

@@ -26,44 +26,31 @@ public class PreceptorServiceImpl implements PreceptorService {
 
     @Override
     public User create(PreceptorDto request) {
-        Preceptor preceptor = new Preceptor();
-        preceptor.setName(request.getName());
-        preceptor.setMiddleName1(request.getMiddleName1());
-        preceptor.setMiddleName2(request.getMiddleName2());
-        preceptor.setMiddleName3(request.getMiddleName3());
-        preceptor.setSurname(request.getSurname());
-        preceptor.setSurname2(request.getSurname2());
-        preceptor.setDni(request.getDni());
-        preceptor.setAddress(request.getAddress());
-        preceptor.setCity(request.getCity());
-        preceptor.setState(request.getState());
-        preceptor.setDateOfBirth(request.getDateOfBirth());
-        preceptor.setNationality(request.getNationality());
-        preceptor.setSituacionDeRevista(request.getSituacionDeRevista());
-        preceptor.setDateOfUp(request.getDateOfUp());
-        preceptor.setDateOfDown(request.getDateOfDown());
-        preceptor.setActive(true);
-        return createPreceptorUser(request.getEmail(), request.getUsername(), request.getPassword(), preceptor);
+        Preceptor preceptor = new Preceptor(request);
+        return createPreceptorUser(request.getEmail(), request.getPassword(), preceptor);
     }
 
     @Override
     public PreceptorDto findById(Long id) {
-        Preceptor preceptor = preceptorRepository.findById(id).orElseThrow(() -> new RuntimeException("No se encontró el preceptor con id: " + id));
-        PreceptorDto dto = new PreceptorDto();
-        dto.setId(preceptor.getId());
-        dto.setName(preceptor.getName());
-        dto.setMiddleName1(preceptor.getMiddleName1());
-        return dto;
+        return preceptorRepository.findById(id)
+                .map(preceptor -> {
+                    PreceptorDto dto = new PreceptorDto();
+                    dto.setId(preceptor.getId());
+                    dto.setName(preceptor.getName());
+                    dto.setMiddleName1(preceptor.getMiddleName1());
+                    return dto;
+                })
+                .orElseThrow(() -> new RuntimeException("No se encontró el preceptor con id: " + id));
     }
 
-    private User createPreceptorUser(String email, String username, String rawPassword, Preceptor preceptorData) {
+    private User createPreceptorUser(String email, String rawPassword, Preceptor preceptorData) {
         Preceptor preceptor = preceptorRepository.save(preceptorData);
         User user = new User();
         user.setEmail(email);
-        user.setUsername(username);
+        user.setUsername(email);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("preceptor");
-        user.addPrecptorAssociation(preceptor, true);
+        user.addPreceptorAssociation(preceptor, true);
         return userRepository.save(user);
     }
 }

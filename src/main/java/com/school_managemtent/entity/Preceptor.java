@@ -1,5 +1,6 @@
 package com.school_managemtent.entity;
 
+import com.school_managemtent.dto.PreceptorDto;
 import com.school_managemtent.entity.relation.UserPreceptor;
 import com.school_managemtent.entity.relation.UserTeacher;
 import jakarta.persistence.*;
@@ -39,6 +40,25 @@ public class Preceptor {
 
     public Preceptor() {
     }
+
+    public Preceptor(PreceptorDto dto) {
+            this.name = dto.getName();
+            this.middleName1 = dto.getMiddleName1();
+            this.middleName2 = dto.getMiddleName2();
+            this.middleName3 = dto.getMiddleName3();
+            this.surname = dto.getSurname();
+            this.surname2 = dto.getSurname2();
+            this.dni = dto.getDni();
+            this.address = dto.getAddress();
+            this.city = dto.getCity();
+            this.state = dto.getState();
+            this.dateOfBirth = dto.getDateOfBirth();
+            this.nationality = dto.getNationality();
+            this.situacionDeRevista = dto.getSituacionDeRevista();
+            this.dateOfUp = dto.getDateOfUp();
+            this.dateOfDown = dto.getDateOfDown();
+            this.active = true;
+        }
 
     public Long getId() {
         return id;

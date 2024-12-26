@@ -1,4 +1,5 @@
 package com.school_managemtent.service.impl;
+import com.school_managemtent.dto.PreceptorDto;
 import com.school_managemtent.dto.TeacherDto;
 import com.school_managemtent.entity.Teacher;
 import com.school_managemtent.entity.User;
@@ -27,41 +28,28 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public User create(TeacherDto request){
-        Teacher teacher = new Teacher();
-        teacher.setName(request.getName());
-        teacher.setMiddleName1(request.getMiddleName1());
-        teacher.setMiddleName2(request.getMiddleName2());
-        teacher.setMiddleName3(request.getMiddleName3());
-        teacher.setSurname(request.getSurname());
-        teacher.setSurname2(request.getSurname2());
-        teacher.setDni(request.getDni());
-        teacher.setAddress(request.getAddress());
-        teacher.setCity(request.getCity());
-        teacher.setState(request.getState());
-        teacher.setDateOfBirth(request.getDateOfBirth());
-        teacher.setNationality(request.getNationality());
-        teacher.setSituacionDeRevista(request.getSituacionDeRevista());
-        teacher.setDateOfUp(request.getDateOfUp());
-        teacher.setDateOfDown(request.getDateOfDown());
-        teacher.setActive(true);
-        return createTeacherUser(request.getEmail(), request.getUsername(), request.getPassword(), teacher);
+        Teacher teacher = new Teacher(request);
+        return createTeacherUser(request.getEmail(), request.getPassword(), teacher);
     }
 
     @Override
     public TeacherDto findById(Long id) {
-        Teacher teacher= teacherRepository.findById(id).orElseThrow(() -> new RuntimeException("No se encontró el teacher con id: " + id));
-        TeacherDto dto = new TeacherDto();
-        dto.setId(teacher.getId());
-        dto.setName(teacher.getName());
-        dto.setMiddleName1(teacher.getMiddleName1());
-        return dto;
+        return teacherRepository.findById(id)
+                .map(teacher -> {
+                    TeacherDto dto = new TeacherDto();
+                    dto.setId(teacher.getId());
+                    dto.setName(teacher.getName());
+                    dto.setMiddleName1(teacher.getMiddleName1());
+                    return dto;
+                })
+                .orElseThrow(() -> new RuntimeException("No se encontró el docente con id: " + id));
     }
 
-    private User createTeacherUser(String email, String username,  String rawPassword, Teacher teacherData) {
+    private User createTeacherUser(String email,  String rawPassword, Teacher teacherData) {
         Teacher teacher = teacherRepository.save(teacherData);
         User user = new User();
         user.setEmail(email);
-        user.setUsername(username);
+        user.setUsername(email);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("teacher");
         user.addTeacherAssociation(teacher, true);

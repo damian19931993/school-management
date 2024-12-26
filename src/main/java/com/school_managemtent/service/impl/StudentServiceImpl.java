@@ -1,6 +1,7 @@
 package com.school_managemtent.service.impl;
 
 import com.school_managemtent.dto.StudentDto;
+import com.school_managemtent.dto.TeacherDto;
 import com.school_managemtent.entity.Student;
 import com.school_managemtent.entity.User;
 import com.school_managemtent.repository.StudentRepository;
@@ -28,40 +29,28 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public User create(StudentDto request){
-        Student student = new Student();
-        student.setName(request.getName());
-        student.setMiddleName1(request.getMiddleName1());
-        student.setMiddleName2(request.getMiddleName2());
-        student.setMiddleName3(request.getMiddleName3());
-        student.setSurname(request.getSurname());
-        student.setSurname2(request.getSurname2());
-        student.setDni(request.getDni());
-        student.setAddress(request.getAddress());
-        student.setCity(request.getCity());
-        student.setState(request.getState());
-        student.setDateOfBirth(request.getDateOfBirth());
-        student.setNationality(request.getNationality());
-        student.setDateOfUp(request.getDateOfUp());
-        student.setDateOfDown(request.getDateOfDown());
-        student.setActive(true);
-        return createStudentUser(request.getEmail(), request.getUsername(), request.getPassword(), student);
+        Student student = new Student(request);
+        return createStudentUser(request.getEmail(), request.getPassword(), student);
     }
 
     @Override
     public StudentDto findById(Long id) {
-        Student student= studentRepository.findById(id).orElseThrow(() -> new RuntimeException("No se encontró el estudiante con id: " + id));
-        StudentDto dto = new StudentDto();
-        dto.setId(student.getId());
-        dto.setName(student.getName());
-        dto.setMiddleName1(student.getMiddleName1());
-        return dto;
+        return studentRepository.findById(id)
+                .map(student -> {
+                    StudentDto dto = new StudentDto();
+                    dto.setId(student.getId());
+                    dto.setName(student.getName());
+                    dto.setMiddleName1(student.getMiddleName1());
+                    return dto;
+                })
+                .orElseThrow(() -> new RuntimeException("No se encontró el estudiante con id: " + id));
     }
 
-    private User createStudentUser(String email, String username, String rawPassword, Student studentData) {
+    private User createStudentUser(String email, String rawPassword, Student studentData) {
         Student student = studentRepository.save(studentData);
         User user = new User();
         user.setEmail(email);
-        user.setUsername(username);
+        user.setUsername(email);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("student");
         user.addStudentAssociation(student, true);
