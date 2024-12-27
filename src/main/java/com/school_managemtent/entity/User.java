@@ -1,10 +1,7 @@
 package com.school_managemtent.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.school_managemtent.entity.relation.UserDirectivo;
-import com.school_managemtent.entity.relation.UserPreceptor;
-import com.school_managemtent.entity.relation.UserStudent;
-import com.school_managemtent.entity.relation.UserTeacher;
+import com.school_managemtent.entity.relation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -36,21 +33,9 @@ public class User {
     @JsonIgnore
     private List<UserStudent> userStudents = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_student",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
-    private List<Student> students = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "user_relative",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "relative_id")
-    )
-    private List<Relative> relatives;
+    @OneToMany(mappedBy = "user" ,  cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<UserRelative> userRelatives = new ArrayList<>();
 
     @OneToMany(mappedBy = "user" ,  cascade = CascadeType.ALL)
     @JsonIgnore
@@ -80,6 +65,11 @@ public class User {
     public void addDirectivoAssociation(Directivo directivo, boolean active) {
         UserDirectivo userDirectivo = new UserDirectivo(this, directivo, active);
         this.userDirectivos.add(userDirectivo);
+    }
+
+    public void addRelativeAssociation(Relative relative, boolean active) {
+        UserRelative userRelative = new UserRelative(this, relative, active);
+        this.userRelatives.add(userRelative);
     }
 
     public User() {
@@ -116,23 +106,6 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
-    public List<Relative> getRelatives() {
-        return relatives;
-    }
-
-    public void setRelatives(List<Relative> relatives) {
-        this.relatives = relatives;
-    }
-
 
     public String getUsername() {
         return username;

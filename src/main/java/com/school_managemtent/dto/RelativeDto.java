@@ -1,28 +1,14 @@
-package com.school_managemtent.entity;
+package com.school_managemtent.dto;
 
-import com.school_managemtent.dto.RelativeDto;
-import com.school_managemtent.dto.StudentDto;
-import com.school_managemtent.entity.relation.UserRelative;
-import com.school_managemtent.entity.relation.UserStudent;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
-public class Relative {
+public class RelativeDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String email;
+    private String username;
+    private String password;
     private String middleName1;
     private String middleName2;
     private String middleName3;
@@ -38,27 +24,7 @@ public class Relative {
     private Date dateOfDown;
     private boolean active;
 
-    @OneToMany(mappedBy = "relative", cascade = CascadeType.ALL)
-    private List<UserRelative> userRelatives = new ArrayList<>();
-
-    public Relative() {}
-
-    public Relative(RelativeDto dto) {
-        this.name = dto.getName();
-        this.middleName1 = dto.getMiddleName1();
-        this.middleName2 = dto.getMiddleName2();
-        this.middleName3 = dto.getMiddleName3();
-        this.surname = dto.getSurname();
-        this.surname2 = dto.getSurname2();
-        this.dni = dto.getDni();
-        this.address = dto.getAddress();
-        this.city = dto.getCity();
-        this.state = dto.getState();
-        this.dateOfBirth = dto.getDateOfBirth();
-        this.nationality = dto.getNationality();
-        this.dateOfUp = dto.getDateOfUp();
-        this.dateOfDown = dto.getDateOfDown();
-        this.active = true;
+    public RelativeDto() {
     }
 
     public Long getId() {
@@ -75,6 +41,30 @@ public class Relative {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getMiddleName1() {
