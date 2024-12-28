@@ -1,12 +1,10 @@
 package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.RelativeDto;
-import com.school_managemtent.dto.StudentDto;
+import com.school_managemtent.entity.relation.RelativeStudent;
 import com.school_managemtent.entity.relation.UserRelative;
-import com.school_managemtent.entity.relation.UserStudent;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
@@ -16,7 +14,6 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class Relative {
 
     @Id
@@ -41,6 +38,9 @@ public class Relative {
     @OneToMany(mappedBy = "relative", cascade = CascadeType.ALL)
     private List<UserRelative> userRelatives = new ArrayList<>();
 
+    @OneToMany(mappedBy = "relative", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RelativeStudent> relativeStudents = new ArrayList<>();
+
     public Relative() {}
 
     public Relative(RelativeDto dto) {
@@ -59,6 +59,28 @@ public class Relative {
         this.dateOfUp = dto.getDateOfUp();
         this.dateOfDown = dto.getDateOfDown();
         this.active = true;
+    }
+
+    public void addStudentAssociation(Student student, boolean active) {
+        // Buscar si ya existe un RelativeStudent con la misma PK (o el mismo Student).
+        for (RelativeStudent rs : this.relativeStudents) {
+            if (rs.getStudent().getId().equals(student.getId())) {
+                // Ya existe la relación; solo actualiza el campo 'active' (si quieres)
+                rs.setActive(active);
+                return; // Evitas crear un objeto duplicado
+            }
+        }
+
+        // Si no existe, creas uno nuevo
+        RelativeStudent relativeStudent = new RelativeStudent(this, student, active);
+        this.relativeStudents.add(relativeStudent);
+        student.getRelativeStudents().add(relativeStudent);
+    }
+
+
+    public void removeStudentAssociation(Student student) {
+        relativeStudents.removeIf(rs -> rs.getStudent().equals(student));
+        student.getRelativeStudents().removeIf(rs -> rs.getRelative().equals(this));
     }
 
     public Long getId() {
@@ -187,5 +209,13 @@ public class Relative {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<RelativeStudent> getRelativeStudents() {
+        return relativeStudents;
+    }
+
+    public void setRelativeStudents(List<RelativeStudent> relativeStudents) {
+        this.relativeStudents = relativeStudents;
     }
 }

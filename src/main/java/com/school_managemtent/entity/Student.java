@@ -1,14 +1,9 @@
 package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.StudentDto;
-import com.school_managemtent.dto.TeacherDto;
+import com.school_managemtent.entity.relation.RelativeStudent;
 import com.school_managemtent.entity.relation.UserStudent;
-import com.school_managemtent.entity.relation.UserTeacher;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +52,20 @@ public class Student {
         this.dateOfUp = dto.getDateOfUp();
         this.dateOfDown = dto.getDateOfDown();
         this.active = true;
+    }
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RelativeStudent> relativeStudents = new ArrayList<>();
+
+    public void addRelativeAssociation(Relative relative, boolean active) {
+        RelativeStudent relativeStudent = new RelativeStudent(relative, this, active);
+        this.relativeStudents.add(relativeStudent);
+        relative.getRelativeStudents().add(relativeStudent);
+    }
+
+    public void removeRelativeAssociation(Relative relative) {
+        relativeStudents.removeIf(rs -> rs.getRelative().equals(relative));
+        relative.getRelativeStudents().removeIf(rs -> rs.getStudent().equals(this));
     }
 
     public Long getId() {
@@ -193,5 +202,13 @@ public class Student {
 
     public void setUserStudents(List<UserStudent> userStudents) {
         this.userStudents = userStudents;
+    }
+
+    public List<RelativeStudent> getRelativeStudents() {
+        return relativeStudents;
+    }
+
+    public void setRelativeStudents(List<RelativeStudent> relativeStudents) {
+        this.relativeStudents = relativeStudents;
     }
 }

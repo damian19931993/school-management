@@ -1,5 +1,7 @@
 package com.school_managemtent.controller;
 
+import com.school_managemtent.dto.SaveResponseDto;
+import com.school_managemtent.dto.StudentDto;
 import com.school_managemtent.dto.TeacherDto;
 import com.school_managemtent.entity.Teacher;
 import com.school_managemtent.entity.User;
@@ -21,9 +23,24 @@ public class TeacherController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createTeacherUser(@RequestBody TeacherDto request) {
-        var response = teacherService.create(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<SaveResponseDto> create(@RequestBody TeacherDto request) {
+        try {
+            User createdUser = teacherService.create(request);
+            SaveResponseDto responseDto = new SaveResponseDto(
+                    "0",
+                    "OK",
+                    "El docente fue creado correctamente."
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+
+        } catch (RuntimeException e) {
+            SaveResponseDto responseDto = new SaveResponseDto(
+                    "99",
+                    "ERROR_UNKNOWN",
+                    "Error al crear el docente: " + e.getMessage()
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDto);
+        }
     }
 
     @GetMapping("/{id}")
