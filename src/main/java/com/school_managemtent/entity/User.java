@@ -45,6 +45,7 @@ public class User {
     @JsonIgnore
     private List<UserDirectivo> userDirectivos = new ArrayList<>();
 
+
     public void addTeacherAssociation(Teacher teacher, boolean active) {
         UserTeacher userTeacher = new UserTeacher(this, teacher, active);
         this.userTeachers.add(userTeacher);

@@ -14,9 +14,6 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
 public class Directivo {
 
     @Id
