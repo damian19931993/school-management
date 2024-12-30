@@ -1,6 +1,7 @@
 package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.SubjectDto;
+import com.school_managemtent.entity.relation.CourseSubject;
 import com.school_managemtent.entity.relation.TeacherSubject;
 import jakarta.persistence.*;
 
@@ -22,6 +23,9 @@ public class Subject {
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeacherSubject> teacherSubjects = new ArrayList<>();
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseSubject> courseSubjects = new ArrayList<>();
 
     public Subject() {}
 
@@ -105,5 +109,13 @@ public class Subject {
 
     public void setTeacherSubjects(List<TeacherSubject> teacherSubjects) {
         this.teacherSubjects = teacherSubjects;
+    }
+
+    public List<CourseSubject> getCourseSubjects() {
+        return courseSubjects;
+    }
+
+    public void setCourseSubjects(List<CourseSubject> courseSubjects) {
+        this.courseSubjects = courseSubjects;
     }
 }
