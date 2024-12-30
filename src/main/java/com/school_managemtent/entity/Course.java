@@ -2,6 +2,7 @@ package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.CourseDto;
 import com.school_managemtent.entity.relation.CoursePreceptor;
+import com.school_managemtent.entity.relation.CourseTeacher;
 import com.school_managemtent.entity.relation.RelativeStudent;
 import jakarta.persistence.*;
 
@@ -23,6 +24,9 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CoursePreceptor> coursePreceptors = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseTeacher> courseTeachers = new ArrayList<>();
 
 
     public Course() {
@@ -54,6 +58,18 @@ public class Course {
         CoursePreceptor coursePreceptor = new CoursePreceptor(this, preceptor, active);
         this.coursePreceptors.add(coursePreceptor);
         preceptor.getCoursePreceptors().add(coursePreceptor);
+    }
+
+    public void addTeacherAssociation(Teacher teacher, boolean active) {
+        for (CourseTeacher rs : this.courseTeachers) {
+            if (rs.getTeacher().getId().equals(teacher.getId())) {
+                rs.setActive(active);
+                return;
+            }
+        }
+        CourseTeacher courseTeacher = new CourseTeacher(this, teacher, active);
+        this.courseTeachers.add(courseTeacher);
+        teacher.getCourseTeachers().add(courseTeacher);
     }
 
     public Long getId() {
@@ -110,5 +126,13 @@ public class Course {
 
     public void setCoursePreceptors(List<CoursePreceptor> coursePreceptors) {
         this.coursePreceptors = coursePreceptors;
+    }
+
+    public List<CourseTeacher> getCourseTeachers() {
+        return courseTeachers;
+    }
+
+    public void setCourseTeachers(List<CourseTeacher> courseTeachers) {
+        this.courseTeachers = courseTeachers;
     }
 }

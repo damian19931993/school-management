@@ -1,6 +1,8 @@
 package com.school_managemtent.entity;
 import com.school_managemtent.dto.PreceptorDto;
 import com.school_managemtent.dto.TeacherDto;
+import com.school_managemtent.entity.relation.CoursePreceptor;
+import com.school_managemtent.entity.relation.CourseTeacher;
 import com.school_managemtent.entity.relation.UserTeacher;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -60,6 +62,9 @@ public class Teacher {
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     private List<UserTeacher> userTeachers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseTeacher> courseTeachers = new ArrayList<>();
 
     public Teacher() {
     }
@@ -225,5 +230,13 @@ public class Teacher {
 
     public void setUserTeachers(List<UserTeacher> userTeachers) {
         this.userTeachers = userTeachers;
+    }
+
+    public List<CourseTeacher> getCourseTeachers() {
+        return courseTeachers;
+    }
+
+    public void setCourseTeachers(List<CourseTeacher> courseTeachers) {
+        this.courseTeachers = courseTeachers;
     }
 }
