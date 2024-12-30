@@ -1,10 +1,12 @@
 package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.CourseDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.school_managemtent.entity.relation.CoursePreceptor;
+import com.school_managemtent.entity.relation.RelativeStudent;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 
@@ -18,6 +20,10 @@ public class Course {
     private String year;
     private String shift;
     private boolean active;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CoursePreceptor> coursePreceptors = new ArrayList<>();
+
 
     public Course() {
     }
@@ -36,6 +42,18 @@ public class Course {
         this.year = request.getYear();
         this.shift = request.getShift();
         this.active = request.isActive();
+    }
+
+    public void addPreceptorAssociation(Preceptor preceptor, boolean active) {
+        for (CoursePreceptor rs : this.coursePreceptors) {
+            if (rs.getPreceptor().getId().equals(preceptor.getId())) {
+                rs.setActive(active);
+                return;
+            }
+        }
+        CoursePreceptor coursePreceptor = new CoursePreceptor(this, preceptor, active);
+        this.coursePreceptors.add(coursePreceptor);
+        preceptor.getCoursePreceptors().add(coursePreceptor);
     }
 
     public Long getId() {
@@ -84,5 +102,13 @@ public class Course {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<CoursePreceptor> getCoursePreceptors() {
+        return coursePreceptors;
+    }
+
+    public void setCoursePreceptors(List<CoursePreceptor> coursePreceptors) {
+        this.coursePreceptors = coursePreceptors;
     }
 }
