@@ -1,10 +1,11 @@
 package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.SubjectDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.school_managemtent.entity.relation.TeacherSubject;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Subject {
@@ -18,6 +19,9 @@ public class Subject {
     private String year;
     private String shift;
     private boolean active;
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeacherSubject> teacherSubjects = new ArrayList<>();
 
     public Subject() {}
 
@@ -93,5 +97,13 @@ public class Subject {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<TeacherSubject> getTeacherSubjects() {
+        return teacherSubjects;
+    }
+
+    public void setTeacherSubjects(List<TeacherSubject> teacherSubjects) {
+        this.teacherSubjects = teacherSubjects;
     }
 }
