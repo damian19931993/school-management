@@ -44,6 +44,9 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentSubject> studentSubjects = new ArrayList<>();
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeacherStudent> teacherStudents = new ArrayList<>();
+
     public Student() {
     }
 
@@ -244,5 +247,13 @@ public class Student {
 
     public void setStudentSubjects(List<StudentSubject> studentSubjects) {
         this.studentSubjects = studentSubjects;
+    }
+
+    public List<TeacherStudent> getTeacherStudents() {
+        return teacherStudents;
+    }
+
+    public void setTeacherStudents(List<TeacherStudent> teacherStudents) {
+        this.teacherStudents = teacherStudents;
     }
 }
