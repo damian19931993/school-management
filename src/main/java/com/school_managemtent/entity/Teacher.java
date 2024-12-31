@@ -70,6 +70,9 @@ public class Teacher {
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeacherStudent> teacherStudents = new ArrayList<>();
 
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TeacherMark> teacherMarks = new ArrayList<>();
+
     public Teacher() {
     }
 
@@ -258,5 +261,13 @@ public class Teacher {
 
     public void setTeacherStudents(List<TeacherStudent> teacherStudents) {
         this.teacherStudents = teacherStudents;
+    }
+
+    public List<TeacherMark> getTeacherMarks() {
+        return teacherMarks;
+    }
+
+    public void setTeacherMarks(List<TeacherMark> teacherMarks) {
+        this.teacherMarks = teacherMarks;
     }
 }

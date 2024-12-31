@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/teacher-student").hasRole("DIRECTIVO")
                         .requestMatchers(HttpMethod.POST, "/api/course-mark").hasRole("DIRECTIVO")
                         .requestMatchers(HttpMethod.POST, "/api/subject-mark").hasRole("DIRECTIVO")
+                        .requestMatchers(HttpMethod.POST, "/api/teacher-mark").hasRole("DIRECTIVO")
                         .requestMatchers(HttpMethod.POST, "/api/subject").hasRole("DIRECTIVO")
                         .requestMatchers(HttpMethod.POST, "/api/mark").hasRole("DIRECTIVO")
                         .requestMatchers(HttpMethod.DELETE, "/api/teacher/**").hasRole("DIRECTIVO")
