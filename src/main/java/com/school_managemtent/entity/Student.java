@@ -1,10 +1,7 @@
 package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.StudentDto;
-import com.school_managemtent.entity.relation.CourseStudent;
-import com.school_managemtent.entity.relation.PreceptorStudent;
-import com.school_managemtent.entity.relation.RelativeStudent;
-import com.school_managemtent.entity.relation.UserStudent;
+import com.school_managemtent.entity.relation.*;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +40,9 @@ public class Student {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PreceptorStudent> preceptorStudents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentSubject> studentSubjects = new ArrayList<>();
 
     public Student() {
     }
@@ -236,5 +236,13 @@ public class Student {
 
     public void setPreceptorStudents(List<PreceptorStudent> preceptorStudents) {
         this.preceptorStudents = preceptorStudents;
+    }
+
+    public List<StudentSubject> getStudentSubjects() {
+        return studentSubjects;
+    }
+
+    public void setStudentSubjects(List<StudentSubject> studentSubjects) {
+        this.studentSubjects = studentSubjects;
     }
 }
