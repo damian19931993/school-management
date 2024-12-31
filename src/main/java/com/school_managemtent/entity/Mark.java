@@ -1,6 +1,7 @@
 package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.MarkDto;
+import com.school_managemtent.entity.relation.CourseMark;
 import com.school_managemtent.entity.relation.StudentMark;
 import com.school_managemtent.entity.relation.TeacherStudent;
 import jakarta.persistence.*;
@@ -29,6 +30,9 @@ public class Mark {
 
     @OneToMany(mappedBy = "mark", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentMark> studentMarks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "mark", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CourseMark> courseMarks = new ArrayList<>();
 
     public Mark() {
     }
@@ -103,5 +107,13 @@ public class Mark {
 
     public void setStudentMarks(List<StudentMark> studentMarks) {
         this.studentMarks = studentMarks;
+    }
+
+    public List<CourseMark> getCourseMarks() {
+        return courseMarks;
+    }
+
+    public void setCourseMarks(List<CourseMark> courseMarks) {
+        this.courseMarks = courseMarks;
     }
 }
