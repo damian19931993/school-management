@@ -1,6 +1,7 @@
 package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.StudentDto;
+import com.school_managemtent.entity.relation.CourseStudent;
 import com.school_managemtent.entity.relation.RelativeStudent;
 import com.school_managemtent.entity.relation.UserStudent;
 import jakarta.persistence.*;
@@ -32,6 +33,9 @@ public class Student {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<UserStudent> userStudents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    private List<CourseStudent> courseStudents = new ArrayList<>();
 
     public Student() {
     }
@@ -210,5 +214,13 @@ public class Student {
 
     public void setRelativeStudents(List<RelativeStudent> relativeStudents) {
         this.relativeStudents = relativeStudents;
+    }
+
+    public List<CourseStudent> getCourseStudents() {
+        return courseStudents;
+    }
+
+    public void setCourseStudents(List<CourseStudent> courseStudents) {
+        this.courseStudents = courseStudents;
     }
 }
