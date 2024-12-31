@@ -1,13 +1,14 @@
 package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.MarkDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.school_managemtent.entity.relation.StudentMark;
+import com.school_managemtent.entity.relation.TeacherStudent;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Mark {
@@ -25,6 +26,9 @@ public class Mark {
     private Date date;
     private String comments;
     private String type;
+
+    @OneToMany(mappedBy = "mark", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentMark> studentMarks = new ArrayList<>();
 
     public Mark() {
     }
@@ -91,5 +95,13 @@ public class Mark {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<StudentMark> getStudentMarks() {
+        return studentMarks;
+    }
+
+    public void setStudentMarks(List<StudentMark> studentMarks) {
+        this.studentMarks = studentMarks;
     }
 }
