@@ -9,6 +9,7 @@ import com.school_managemtent.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -43,6 +44,7 @@ public class TeacherController {
         }
     }
 
+    @PreAuthorize("hasRole('DIRECTIVO')")
     @GetMapping("/{id}")
     public ResponseEntity<TeacherDto> getTeacher(@PathVariable Long id) {
         var response = teacherService.findById(id);
