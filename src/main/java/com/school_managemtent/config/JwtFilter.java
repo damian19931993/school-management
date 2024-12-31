@@ -1,5 +1,6 @@
 package com.school_managemtent.config;
 
+import com.school_managemtent.service.impl.TokenBlacklistService;
 import com.school_managemtent.util.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,10 +24,12 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public JwtFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil) {
+    public JwtFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil, TokenBlacklistService tokenBlacklistService) {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
@@ -47,6 +50,10 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String token = authorizationHeader.substring(7);
+        if (tokenBlacklistService.isTokenBlacklisted(token)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is blacklisted");
+            return;
+        }
         String username = jwtUtil.extractUsername(token);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
