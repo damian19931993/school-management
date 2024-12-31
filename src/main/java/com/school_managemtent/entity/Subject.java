@@ -3,6 +3,7 @@ package com.school_managemtent.entity;
 import com.school_managemtent.dto.SubjectDto;
 import com.school_managemtent.entity.relation.CourseSubject;
 import com.school_managemtent.entity.relation.StudentSubject;
+import com.school_managemtent.entity.relation.SubjectMark;
 import com.school_managemtent.entity.relation.TeacherSubject;
 import jakarta.persistence.*;
 
@@ -30,6 +31,9 @@ public class Subject {
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudentSubject> studentSubjects = new ArrayList<>();
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SubjectMark> subjectMarks = new ArrayList<>();
 
     public Subject() {}
 
@@ -129,5 +133,13 @@ public class Subject {
 
     public void setStudentSubjects(List<StudentSubject> studentSubjects) {
         this.studentSubjects = studentSubjects;
+    }
+
+    public List<SubjectMark> getSubjectMarks() {
+        return subjectMarks;
+    }
+
+    public void setSubjectMarks(List<SubjectMark> subjectMarks) {
+        this.subjectMarks = subjectMarks;
     }
 }
