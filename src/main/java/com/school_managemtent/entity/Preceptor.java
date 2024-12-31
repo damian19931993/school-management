@@ -1,10 +1,7 @@
 package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.PreceptorDto;
-import com.school_managemtent.entity.relation.CoursePreceptor;
-import com.school_managemtent.entity.relation.RelativeStudent;
-import com.school_managemtent.entity.relation.UserPreceptor;
-import com.school_managemtent.entity.relation.UserTeacher;
+import com.school_managemtent.entity.relation.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +39,9 @@ public class Preceptor {
 
     @OneToMany(mappedBy = "preceptor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CoursePreceptor> coursePreceptors = new ArrayList<>();
+
+    @OneToMany(mappedBy = "preceptor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PreceptorStudent> preceptorStudents = new ArrayList<>();
 
     public Preceptor() {
     }
@@ -215,5 +215,13 @@ public class Preceptor {
 
     public void setCoursePreceptors(List<CoursePreceptor> coursePreceptors) {
         this.coursePreceptors = coursePreceptors;
+    }
+
+    public List<PreceptorStudent> getPreceptorStudents() {
+        return preceptorStudents;
+    }
+
+    public void setPreceptorStudents(List<PreceptorStudent> preceptorStudents) {
+        this.preceptorStudents = preceptorStudents;
     }
 }

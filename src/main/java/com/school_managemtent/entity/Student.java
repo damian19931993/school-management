@@ -2,6 +2,7 @@ package com.school_managemtent.entity;
 
 import com.school_managemtent.dto.StudentDto;
 import com.school_managemtent.entity.relation.CourseStudent;
+import com.school_managemtent.entity.relation.PreceptorStudent;
 import com.school_managemtent.entity.relation.RelativeStudent;
 import com.school_managemtent.entity.relation.UserStudent;
 import jakarta.persistence.*;
@@ -37,6 +38,12 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<CourseStudent> courseStudents = new ArrayList<>();
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RelativeStudent> relativeStudents = new ArrayList<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PreceptorStudent> preceptorStudents = new ArrayList<>();
+
     public Student() {
     }
 
@@ -58,8 +65,7 @@ public class Student {
         this.active = true;
     }
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RelativeStudent> relativeStudents = new ArrayList<>();
+
 
     public void addRelativeAssociation(Relative relative, boolean active) {
         RelativeStudent relativeStudent = new RelativeStudent(relative, this, active);
@@ -222,5 +228,13 @@ public class Student {
 
     public void setCourseStudents(List<CourseStudent> courseStudents) {
         this.courseStudents = courseStudents;
+    }
+
+    public List<PreceptorStudent> getPreceptorStudents() {
+        return preceptorStudents;
+    }
+
+    public void setPreceptorStudents(List<PreceptorStudent> preceptorStudents) {
+        this.preceptorStudents = preceptorStudents;
     }
 }
