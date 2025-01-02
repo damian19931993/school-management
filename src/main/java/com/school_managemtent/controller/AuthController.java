@@ -2,6 +2,7 @@ package com.school_managemtent.controller;
 
 
 import com.school_managemtent.dto.AuthResponseDto;
+import com.school_managemtent.exception.BadUsernameOrPasswordException;
 import com.school_managemtent.service.impl.MyUserDetailsService;
 import com.school_managemtent.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class AuthController {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         } catch (AuthenticationException e) {
-            throw new Exception("Invalid username/password");
+            throw new BadUsernameOrPasswordException("Invalid username/password");
         }
 
         // Generar el token JWT
