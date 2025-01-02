@@ -1,6 +1,8 @@
 package com.school_managemtent.config;
 
 import com.school_managemtent.service.impl.MyUserDetailsService;
+import com.school_managemtent.service.impl.TokenBlacklistService;
+import com.school_managemtent.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,16 +26,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig {
 
     private final MyUserDetailsService myUserDetailsService;
-    private final JwtFilter jwtFilter;
+    private final TokenBlacklistService tokenBlacklistService;
 
-    public SecurityConfig(MyUserDetailsService myUserDetailsService, JwtFilter jwtFilter) {
+    public SecurityConfig(MyUserDetailsService myUserDetailsService, TokenBlacklistService tokenBlacklistService) {
         this.myUserDetailsService = myUserDetailsService;
-        this.jwtFilter = jwtFilter;
+        this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
+        JwtFilter jwtFilter = new JwtFilter(myUserDetailsService, tokenBlacklistService);
         http.cors(Customizer.withDefaults());
         http
                 .csrf(csrf -> csrf.disable())
@@ -59,14 +61,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(myUserDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
-
-    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -88,5 +82,5 @@ public class SecurityConfig {
                         .allowCredentials(true);
             }
         };
-}
+    }
 }

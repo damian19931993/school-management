@@ -2,12 +2,14 @@ package com.school_managemtent.controller;
 
 
 import com.school_managemtent.dto.AuthResponseDto;
+import com.school_managemtent.service.impl.MyUserDetailsService;
 import com.school_managemtent.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +23,9 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody AuthRequest authRequest) throws Exception {
         try {
@@ -29,8 +34,21 @@ public class AuthController {
         } catch (AuthenticationException e) {
             throw new Exception("Invalid username/password");
         }
+
+        // Generar el token JWT
         String token = jwtUtil.generateToken(authRequest.getUsername());
-        AuthResponseDto response = new AuthResponseDto(token);
+
+        // Obtener los detalles del usuario usando MyUserDetailsService
+        UserDetails userDetails = myUserDetailsService.loadUserByUsername(authRequest.getUsername());
+
+        // Extraer el rol del usuario
+        String role = userDetails.getAuthorities().stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .findFirst()
+                .orElse("ROLE_USER"); // Rol por defecto si no hay roles asignados
+
+        // Crear la respuesta con token y rol
+        AuthResponseDto response = new AuthResponseDto(token, role);
         return ResponseEntity.ok(response);
     }
 }
@@ -55,4 +73,3 @@ class AuthRequest {
         this.password = password;
     }
 }
-

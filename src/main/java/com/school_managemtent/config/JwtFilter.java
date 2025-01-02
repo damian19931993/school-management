@@ -17,26 +17,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import org.springframework.util.AntPathMatcher;
-
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
-    private final JwtUtil jwtUtil;
-    private final AntPathMatcher pathMatcher = new AntPathMatcher();
     private final TokenBlacklistService tokenBlacklistService;
 
-    public JwtFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil, TokenBlacklistService tokenBlacklistService) {
+    public JwtFilter(UserDetailsService userDetailsService, TokenBlacklistService tokenBlacklistService) {
         this.userDetailsService = userDetailsService;
-        this.jwtUtil = jwtUtil;
         this.tokenBlacklistService = tokenBlacklistService;
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        // Excluir rutas específicas del filtro
         String path = request.getServletPath();
-        return pathMatcher.match("/api/auth/login", path) || pathMatcher.match("/api/user", path);
+        return path.equals("/api/auth/login") || path.equals("/api/user");
     }
 
     @Override
@@ -45,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            chain.doFilter(request, response);
             return;
         }
 
@@ -54,12 +49,13 @@ public class JwtFilter extends OncePerRequestFilter {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is blacklisted");
             return;
         }
-        String username = jwtUtil.extractUsername(token);
+
+        String username = JwtUtil.extractUsername(token);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if (jwtUtil.validateToken(token, userDetails)) {
+            if (JwtUtil.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

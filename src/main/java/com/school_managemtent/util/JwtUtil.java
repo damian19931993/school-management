@@ -1,5 +1,6 @@
 package com.school_managemtent.util;
 
+import com.school_managemtent.service.impl.MyUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,18 +14,18 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);// Generate a secure key
+    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String generateToken(String username) {
+    public static String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
                 .signWith(key)
                 .compact();
     }
 
-    public String extractUsername(String token) {
+    public static String extractUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -33,12 +34,12 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public static boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private boolean isTokenExpired(String token) {
+    private static boolean isTokenExpired(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -46,5 +47,4 @@ public class JwtUtil {
                 .getBody();
         return claims.getExpiration().before(new Date());
     }
-
 }
