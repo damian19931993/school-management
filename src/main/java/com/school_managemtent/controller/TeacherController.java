@@ -5,12 +5,16 @@ import com.school_managemtent.dto.StudentDto;
 import com.school_managemtent.dto.TeacherDto;
 import com.school_managemtent.entity.Teacher;
 import com.school_managemtent.entity.User;
+import com.school_managemtent.exception.ExistingEntityException;
 import com.school_managemtent.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestController
 @RequestMapping("/api/teacher")
@@ -34,13 +38,8 @@ public class TeacherController {
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 
-        } catch (RuntimeException e) {
-            SaveResponseDto responseDto = new SaveResponseDto(
-                    "99",
-                    "ERROR_UNKNOWN",
-                    "Error al crear el docente: " + e.getMessage()
-            );
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDto);
+        } catch (DataIntegrityViolationException e) {
+            throw new ExistingEntityException("El docente ya existe.");
         }
     }
 

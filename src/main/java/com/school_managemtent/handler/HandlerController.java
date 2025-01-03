@@ -3,6 +3,7 @@ package com.school_managemtent.handler;
 import com.school_managemtent.dto.SaveResponseDto;
 import com.school_managemtent.dto.exception.BadUsernameOoPasswordExceptionResponseDto;
 import com.school_managemtent.exception.BadUsernameOrPasswordException;
+import com.school_managemtent.exception.ExistingEntityException;
 import com.school_managemtent.exception.NonAvailableDataBaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,14 @@ public class HandlerController {
     public ResponseEntity<BadUsernameOoPasswordExceptionResponseDto> handleBadUsernameOrPasswordException(BadUsernameOrPasswordException ex) {
         BadUsernameOoPasswordExceptionResponseDto response = new BadUsernameOoPasswordExceptionResponseDto("1", "El usuario o contraseña son inválidos.");
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ExistingEntityException.class)
+    public ResponseEntity<SaveResponseDto> handleExistingEntityException(ExistingEntityException ex) {
+        SaveResponseDto response = new SaveResponseDto();
+        response.setCode("2");
+        response.setDescription("Entidad ya existente.");
+        response.setMessage(ex.getMessage());
+        return ResponseEntity.badRequest().body(response);
     }
 }
