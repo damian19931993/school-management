@@ -3,6 +3,7 @@ package com.school_managemtent.controller;
 import com.school_managemtent.dto.SaveResponseDto;
 import com.school_managemtent.dto.StudentDto;
 import com.school_managemtent.dto.TeacherDto;
+import com.school_managemtent.dto.response.AllTeachersResponseDto;
 import com.school_managemtent.entity.Teacher;
 import com.school_managemtent.entity.User;
 import com.school_managemtent.exception.ExistingEntityException;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/teacher")
@@ -45,12 +47,16 @@ public class TeacherController {
         }
     }
 
-    @PreAuthorize("hasRole('DIRECTIVO')")
     @GetMapping("/{id}")
     public ResponseEntity<TeacherDto> getTeacher(@PathVariable Long id) {
         var response = teacherService.findById(id);
         return ResponseEntity.ok(response);
     }
 
-
+    @GetMapping
+    @PreAuthorize("hasRole('DIRECTIVO')")
+    public ResponseEntity<AllTeachersResponseDto> findAll() {
+        return ResponseEntity.ok(teacherService.findAll());
+    }
+    
 }

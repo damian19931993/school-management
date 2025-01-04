@@ -1,6 +1,7 @@
 package com.school_managemtent.service.impl;
 import com.school_managemtent.dto.PreceptorDto;
 import com.school_managemtent.dto.TeacherDto;
+import com.school_managemtent.dto.response.AllTeachersResponseDto;
 import com.school_managemtent.entity.Teacher;
 import com.school_managemtent.entity.User;
 import com.school_managemtent.entity.log.TransactionLog;
@@ -13,7 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -46,6 +49,26 @@ public class TeacherServiceImpl implements TeacherService {
         return createTeacherUser(request.getEmail(), request.getPassword(), teacher);
     }
 
+    @Override
+    public AllTeachersResponseDto findAll() {
+        AllTeachersResponseDto response = new AllTeachersResponseDto();
+        List<TeacherDto> teachers = teacherRepository.findAll().stream()
+                .map(teacher -> {
+                    TeacherDto dto = new TeacherDto();
+                    dto.setId(teacher.getId());
+                    dto.setName(teacher.getName());
+                    dto.setMiddleName1(teacher.getMiddleName1());
+                    dto.setDni(teacher.getDni());
+                    dto.setSituacionDeRevista(teacher.getSituacionDeRevista());
+                    dto.setActive(teacher.isActive());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        response.setCode("0");
+        response.setDescription("OK");
+        response.setTeachers(teachers);
+        return response;
+    }
     @Override
     public TeacherDto findById(Long id) {
         return teacherRepository.findById(id)
