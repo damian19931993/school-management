@@ -55,8 +55,8 @@ public class TeacherController {
 
     @GetMapping
     @PreAuthorize("hasRole('DIRECTIVO')")
-    public ResponseEntity<AllTeachersResponseDto> findAll() {
-        return ResponseEntity.ok(teacherService.findAll());
+    public ResponseEntity<AllTeachersResponseDto> findAll(@RequestHeader("username") String username) {
+        return ResponseEntity.ok(teacherService.findAll(username));
     }
     
 }

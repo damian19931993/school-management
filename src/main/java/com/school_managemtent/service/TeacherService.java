@@ -11,5 +11,5 @@ public interface TeacherService {
 
     User create(TeacherDto request,String username);
     TeacherDto findById(Long id);
-    AllTeachersResponseDto findAll();
+    AllTeachersResponseDto findAll(String username);
 }

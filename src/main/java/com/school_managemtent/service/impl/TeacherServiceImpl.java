@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
+
 @Service
 @Transactional
 public class TeacherServiceImpl implements TeacherService {
@@ -26,31 +28,32 @@ public class TeacherServiceImpl implements TeacherService {
     private final TeacherRepository teacherRepository;
     private final PasswordEncoder passwordEncoder;
     private final TransactionLogRepository transactionLogRepository;
+    private final TransactionLogService transactionLogService;
 
     @Autowired
     public TeacherServiceImpl(UserRepository userRepository,
                            TeacherRepository teacherRepository,
-                           PasswordEncoder passwordEncoder, TransactionLogRepository transactionLogRepository) {
+                           PasswordEncoder passwordEncoder, TransactionLogRepository transactionLogRepository, TransactionLogService transactionLogService) {
         this.userRepository = userRepository;
         this.teacherRepository = teacherRepository;
         this.passwordEncoder = passwordEncoder;
         this.transactionLogRepository = transactionLogRepository;
+        this.transactionLogService = transactionLogService;
     }
 
     @Override
     public User create(TeacherDto request,String username){
         Teacher teacher = new Teacher(request);
-        TransactionLog transaction = new TransactionLog();
-        transaction.setTransactionId(UUID.randomUUID().toString());
-        transaction.setOperation("Crear docente.");
-        transaction.setPerformedBy(username);
-        transaction.setDetails("Docente creado: " + teacher.getName() + ", DNI: " + teacher.getDni());
-        transactionLogRepository.save(transaction);
+        transactionLogService.createLog(
+                "Crear docente - Éxito",
+                "Docente creado: " + teacher.getName() + ", DNI: " + teacher.getDni(),
+                username
+        );
         return createTeacherUser(request.getEmail(), request.getPassword(), teacher);
     }
 
     @Override
-    public AllTeachersResponseDto findAll() {
+    public AllTeachersResponseDto findAll(String username) {
         AllTeachersResponseDto response = new AllTeachersResponseDto();
         List<TeacherDto> teachers = teacherRepository.findAll().stream()
                 .map(teacher -> {
@@ -67,6 +70,11 @@ public class TeacherServiceImpl implements TeacherService {
         response.setCode("0");
         response.setDescription("OK");
         response.setTeachers(teachers);
+        transactionLogService.createLog(
+                "Buscar todos los docentes activos - Éxito",
+                "Se encontraron " + teachers.size() + " docentes activos.",
+                username
+        );
         return response;
     }
     @Override
@@ -92,4 +100,5 @@ public class TeacherServiceImpl implements TeacherService {
         user.addTeacherAssociation(teacher, true);
         return userRepository.save(user);
     }
+
 }
