@@ -2,16 +2,26 @@ package com.school_managemtent.handler;
 
 import com.school_managemtent.dto.SaveResponseDto;
 import com.school_managemtent.dto.exception.BadUsernameOoPasswordExceptionResponseDto;
+import com.school_managemtent.dto.exception.NoExistingEntityResponseDto;
+import com.school_managemtent.entity.log.TransactionLog;
 import com.school_managemtent.exception.BadUsernameOrPasswordException;
 import com.school_managemtent.exception.ExistingEntityException;
 import com.school_managemtent.exception.NonAvailableDataBaseException;
+import com.school_managemtent.repository.TransactionLogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @ControllerAdvice
 public class HandlerController {
+
+    @Autowired
+    private TransactionLogRepository transactionLogRepository;
 
     @ExceptionHandler(NonAvailableDataBaseException.class)
     public ResponseEntity<SaveResponseDto> handleNonAvailableDataBaseException(NonAvailableDataBaseException ex) {
@@ -29,11 +39,22 @@ public class HandlerController {
     }
 
     @ExceptionHandler(ExistingEntityException.class)
-    public ResponseEntity<SaveResponseDto> handleExistingEntityException(ExistingEntityException ex) {
-        SaveResponseDto response = new SaveResponseDto();
+    public ResponseEntity<NoExistingEntityResponseDto> handleExistingEntityException(ExistingEntityException ex) {
+        NoExistingEntityResponseDto response = new NoExistingEntityResponseDto();
         response.setCode("2");
         response.setDescription("Entidad ya existente.");
         response.setMessage(ex.getMessage());
+        createLog("Docente Existente", ex.getUsername() ,ex.getMessage());
         return ResponseEntity.badRequest().body(response);
+    }
+
+    private TransactionLog createLog(String operation, String username, String details) {
+        TransactionLog log = new TransactionLog();
+        log.setTransactionId((UUID.randomUUID().toString()));
+        log.setOperation(operation);
+        log.setPerformedBy(username);
+        log.setDetails(details);
+        log.setTimestamp(LocalDateTime.now());
+        return transactionLogRepository.save(log);
     }
 }

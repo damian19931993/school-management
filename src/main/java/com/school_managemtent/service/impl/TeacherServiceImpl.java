@@ -3,13 +3,17 @@ import com.school_managemtent.dto.PreceptorDto;
 import com.school_managemtent.dto.TeacherDto;
 import com.school_managemtent.entity.Teacher;
 import com.school_managemtent.entity.User;
+import com.school_managemtent.entity.log.TransactionLog;
 import com.school_managemtent.repository.TeacherRepository;
+import com.school_managemtent.repository.TransactionLogRepository;
 import com.school_managemtent.repository.UserRepository;
 import com.school_managemtent.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -18,19 +22,27 @@ public class TeacherServiceImpl implements TeacherService {
     private final UserRepository userRepository;
     private final TeacherRepository teacherRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TransactionLogRepository transactionLogRepository;
 
     @Autowired
     public TeacherServiceImpl(UserRepository userRepository,
                            TeacherRepository teacherRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder, TransactionLogRepository transactionLogRepository) {
         this.userRepository = userRepository;
         this.teacherRepository = teacherRepository;
         this.passwordEncoder = passwordEncoder;
+        this.transactionLogRepository = transactionLogRepository;
     }
 
     @Override
-    public User create(TeacherDto request){
+    public User create(TeacherDto request,String username){
         Teacher teacher = new Teacher(request);
+        TransactionLog transaction = new TransactionLog();
+        transaction.setTransactionId(UUID.randomUUID().toString());
+        transaction.setOperation("Crear docente.");
+        transaction.setPerformedBy(username);
+        transaction.setDetails("Docente creado: " + teacher.getName() + ", DNI: " + teacher.getDni());
+        transactionLogRepository.save(transaction);
         return createTeacherUser(request.getEmail(), request.getPassword(), teacher);
     }
 

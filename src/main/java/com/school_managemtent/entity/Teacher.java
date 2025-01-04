@@ -57,6 +57,7 @@ public class Teacher {
     @Temporal(TemporalType.DATE)
     private Date dateOfDown;
     private boolean active;
+    private String createdBy;
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     private List<UserTeacher> userTeachers = new ArrayList<>();
@@ -230,6 +231,15 @@ public class Teacher {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
 
     public List<UserTeacher> getUserTeachers() {
         return userTeachers;

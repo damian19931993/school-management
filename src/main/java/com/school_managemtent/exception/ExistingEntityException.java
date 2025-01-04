@@ -1,7 +1,15 @@
 package com.school_managemtent.exception;
 
+
 public class ExistingEntityException extends RuntimeException {
-  public ExistingEntityException(String message) {
+  private String username;
+
+  public ExistingEntityException(String message, String username) {
     super(message);
+    this.username = username;
+  }
+
+  public String getUsername() {
+    return username;
   }
 }

@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -28,9 +29,9 @@ public class TeacherController {
     }
 
     @PostMapping
-    public ResponseEntity<SaveResponseDto> create(@RequestBody TeacherDto request) {
+    public ResponseEntity<SaveResponseDto> create(@RequestBody TeacherDto request, @RequestHeader("username") String username) {
         try {
-            User createdUser = teacherService.create(request);
+            teacherService.create(request, username);
             SaveResponseDto responseDto = new SaveResponseDto(
                     "0",
                     "OK",
@@ -39,7 +40,8 @@ public class TeacherController {
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 
         } catch (DataIntegrityViolationException e) {
-            throw new ExistingEntityException("El docente ya existe.");
+            throw new ExistingEntityException("El docente con dni: " + request.getDni() +
+                    " O con email: " + request.getEmail() + " ya existe.", username);
         }
     }
 
