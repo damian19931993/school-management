@@ -5,6 +5,7 @@ import com.school_managemtent.dto.response.AllTeachersResponseDto;
 import com.school_managemtent.entity.Teacher;
 import com.school_managemtent.entity.User;
 import com.school_managemtent.entity.log.TransactionLog;
+import com.school_managemtent.exception.NotFoundEntityException;
 import com.school_managemtent.repository.TeacherRepository;
 import com.school_managemtent.repository.TransactionLogRepository;
 import com.school_managemtent.repository.UserRepository;
@@ -89,10 +90,26 @@ public class TeacherServiceImpl implements TeacherService {
                     TeacherDto dto = new TeacherDto();
                     dto.setId(teacher.getId());
                     dto.setName(teacher.getName());
+                    dto.setEmail(username);
+                    dto.setUsername(username);
                     dto.setMiddleName1(teacher.getMiddleName1());
+                    dto.setMiddleName2(teacher.getMiddleName2());
+                    dto.setMiddleName3(teacher.getMiddleName3());
+                    dto.setSurname(teacher.getSurname());
+                    dto.setSurname2(teacher.getSurname2());
+                    dto.setDni(teacher.getDni());
+                    dto.setAddress(teacher.getAddress());
+                    dto.setCity(teacher.getCity());
+                    dto.setState(teacher.getState());
+                    dto.setDateOfBirth(teacher.getDateOfBirth());
+                    dto.setNationality(teacher.getNationality());
+                    dto.setSituacionDeRevista(teacher.getSituacionDeRevista());
+                    dto.setDateOfUp(teacher.getDateOfUp());
+                    dto.setDateOfDown(teacher.getDateOfDown());
+                    dto.setActive(true);
                     return dto;
                 })
-                .orElseThrow(() -> new RuntimeException("No se encontró el docente con id: " + id));
+                .orElseThrow(() -> new NotFoundEntityException("No se encontró el docente con id: " + id, username));
     }
 
     private User createTeacherUser(String email,  String rawPassword, Teacher teacherData) {

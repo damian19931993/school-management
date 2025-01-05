@@ -3,10 +3,12 @@ package com.school_managemtent.handler;
 import com.school_managemtent.dto.SaveResponseDto;
 import com.school_managemtent.dto.exception.BadUsernameOoPasswordExceptionResponseDto;
 import com.school_managemtent.dto.exception.NoExistingEntityResponseDto;
+import com.school_managemtent.dto.response.EntityGenericResponse;
 import com.school_managemtent.entity.log.TransactionLog;
 import com.school_managemtent.exception.BadUsernameOrPasswordException;
 import com.school_managemtent.exception.ExistingEntityException;
 import com.school_managemtent.exception.NonAvailableDataBaseException;
+import com.school_managemtent.exception.NotFoundEntityException;
 import com.school_managemtent.repository.TransactionLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,6 +48,16 @@ public class HandlerController {
         response.setMessage(ex.getMessage());
         createLog("Docente Existente", ex.getUsername() ,ex.getMessage());
         return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(NotFoundEntityException.class)
+    public ResponseEntity<SaveResponseDto> handleNotFoundEntityException(NotFoundEntityException ex){
+        SaveResponseDto response = new SaveResponseDto();
+        response.setCode("3");
+        response.setDescription("Entidad no encontrada.");
+        response.setMessage(ex.getMessage());
+        createLog("Entidad no encontrada.", ex.getUsername(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     private TransactionLog createLog(String operation, String username, String details) {

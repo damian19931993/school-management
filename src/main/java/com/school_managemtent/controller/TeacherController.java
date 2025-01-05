@@ -4,6 +4,7 @@ import com.school_managemtent.dto.SaveResponseDto;
 import com.school_managemtent.dto.StudentDto;
 import com.school_managemtent.dto.TeacherDto;
 import com.school_managemtent.dto.response.AllTeachersResponseDto;
+import com.school_managemtent.dto.response.EntityGenericResponse;
 import com.school_managemtent.entity.Teacher;
 import com.school_managemtent.entity.User;
 import com.school_managemtent.exception.ExistingEntityException;
@@ -48,9 +49,10 @@ public class TeacherController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TeacherDto> getTeacher(@PathVariable Long id, @RequestHeader("username") String username) {
+    public ResponseEntity<EntityGenericResponse<TeacherDto>> getTeacher(@PathVariable Long id, @RequestHeader("username") String username) {
         var response = teacherService.findById(id, username);
-        return ResponseEntity.ok(response);
+        EntityGenericResponse<TeacherDto> genericResponse = new EntityGenericResponse<>("0","OK",response);
+        return ResponseEntity.ok(genericResponse);
     }
 
     @GetMapping
