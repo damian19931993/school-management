@@ -5,10 +5,7 @@ import com.school_managemtent.dto.exception.BadUsernameOoPasswordExceptionRespon
 import com.school_managemtent.dto.exception.NoExistingEntityResponseDto;
 import com.school_managemtent.dto.response.EntityGenericResponse;
 import com.school_managemtent.entity.log.TransactionLog;
-import com.school_managemtent.exception.BadUsernameOrPasswordException;
-import com.school_managemtent.exception.ExistingEntityException;
-import com.school_managemtent.exception.NonAvailableDataBaseException;
-import com.school_managemtent.exception.NotFoundEntityException;
+import com.school_managemtent.exception.*;
 import com.school_managemtent.repository.TransactionLogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,6 +54,16 @@ public class HandlerController {
         response.setDescription("Entidad no encontrada.");
         response.setMessage(ex.getMessage());
         createLog("Entidad no encontrada.", ex.getUsername(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(NotFoundRelationResponseException.class)
+    public ResponseEntity<SaveResponseDto> handleNotFoundRelationResponseException(NotFoundRelationResponseException ex){
+        SaveResponseDto response = new SaveResponseDto();
+        response.setCode("3");
+        response.setDescription("Relación no encontrada.");
+        response.setMessage(ex.getMessage());
+        createLog("Relación no encontrada.", ex.getUsername(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 

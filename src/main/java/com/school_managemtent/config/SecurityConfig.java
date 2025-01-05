@@ -43,9 +43,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/teacher", "/api/preceptor", "/api/directivo", "/api/relative", "/api/relative-student",
                                 "/api/course", "/api/course-preceptor", "/api/course-teacher", "/api/teacher-subject",
-                                "/api/course-subject", "/api/course-student", "/api/preceptor-student", "/api/student-subject", "/api/student-mark", "/api/teacher-student", "/api/course-mark", "/api/subject-mark", "/api/teacher-mark", "/api/subject", "/api/mark"
+                                "/api/course-subject", "/api/course-student", "/api/preceptor-student", "/api/student-subject", "/api/student-mark", "/api/teacher-student", "/api/course-mark", "/api/subject-mark", "/api/teacher-mark", "/api/subject", "/api/mark",
+                                "/api/teacher-subject/teacherId"
                         ).hasRole("DIRECTIVO")
-                        .requestMatchers(HttpMethod.GET, "/api/teacher/**").hasRole("DIRECTIVO")
+                        .requestMatchers(HttpMethod.GET, "/api/teacher/**", "/api/subject/**").hasRole("DIRECTIVO")
                         .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/validateToken").permitAll()

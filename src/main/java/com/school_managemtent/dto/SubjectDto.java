@@ -3,7 +3,7 @@ package com.school_managemtent.dto;
 public class SubjectDto {
 
     private String name;
-    private String CourseName;
+    private String courseName;
     private String division;
     private String year;
     private String shift;
@@ -21,11 +21,11 @@ public class SubjectDto {
     }
 
     public String getCourseName() {
-        return CourseName;
+        return courseName;
     }
 
     public void setCourseName(String courseName) {
-        CourseName = courseName;
+        this.courseName = courseName;
     }
 
     public String getDivision() {

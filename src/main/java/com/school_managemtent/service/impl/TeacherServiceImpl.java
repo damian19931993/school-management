@@ -61,6 +61,7 @@ public class TeacherServiceImpl implements TeacherService {
                     TeacherDto dto = new TeacherDto();
                     dto.setId(teacher.getId());
                     dto.setName(teacher.getName());
+                    dto.setSurname(teacher.getSurname());
                     dto.setMiddleName1(teacher.getMiddleName1());
                     dto.setDni(teacher.getDni());
                     dto.setSituacionDeRevista(teacher.getSituacionDeRevista());
@@ -90,8 +91,8 @@ public class TeacherServiceImpl implements TeacherService {
                     TeacherDto dto = new TeacherDto();
                     dto.setId(teacher.getId());
                     dto.setName(teacher.getName());
-                    dto.setEmail(username);
-                    dto.setUsername(username);
+                    dto.setEmail(teacher.getUser().getEmail());
+                    dto.setUsername(teacher.getUser().getUsername());
                     dto.setMiddleName1(teacher.getMiddleName1());
                     dto.setMiddleName2(teacher.getMiddleName2());
                     dto.setMiddleName3(teacher.getMiddleName3());
@@ -120,7 +121,10 @@ public class TeacherServiceImpl implements TeacherService {
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("teacher");
         user.addTeacherAssociation(teacher, true);
+        teacher.setUser(user);
+        teacherRepository.save(teacher);
         return userRepository.save(user);
+
     }
 
 }

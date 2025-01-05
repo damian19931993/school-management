@@ -74,6 +74,10 @@ public class Teacher {
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeacherMark> teacherMarks = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user = new User();
+
     public Teacher() {
     }
 
@@ -279,5 +283,13 @@ public class Teacher {
 
     public void setTeacherMarks(List<TeacherMark> teacherMarks) {
         this.teacherMarks = teacherMarks;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
