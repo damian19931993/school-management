@@ -10,6 +10,6 @@ import java.util.List;
 public interface TeacherService {
 
     User create(TeacherDto request,String username);
-    TeacherDto findById(Long id);
+    TeacherDto findById(Long id, String username);
     AllTeachersResponseDto findAll(String username);
 }

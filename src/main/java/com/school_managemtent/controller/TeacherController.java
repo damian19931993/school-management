@@ -48,8 +48,8 @@ public class TeacherController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TeacherDto> getTeacher(@PathVariable Long id) {
-        var response = teacherService.findById(id);
+    public ResponseEntity<TeacherDto> getTeacher(@PathVariable Long id, @RequestHeader("username") String username) {
+        var response = teacherService.findById(id, username);
         return ResponseEntity.ok(response);
     }
 

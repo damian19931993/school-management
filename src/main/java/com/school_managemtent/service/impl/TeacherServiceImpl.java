@@ -78,7 +78,12 @@ public class TeacherServiceImpl implements TeacherService {
         return response;
     }
     @Override
-    public TeacherDto findById(Long id) {
+    public TeacherDto findById(Long id, String username) {
+        transactionLogService.createLog(
+                "Buscar docente - Éxito",
+                "Se encontro docente con id " + id,
+                username
+        );
         return teacherRepository.findById(id)
                 .map(teacher -> {
                     TeacherDto dto = new TeacherDto();
