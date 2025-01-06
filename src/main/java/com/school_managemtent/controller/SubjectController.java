@@ -29,7 +29,7 @@ public class SubjectController {
             return ResponseEntity.ok(response);
         }
         catch (DataIntegrityViolationException e) {
-            throw  new ExistingEntityException("La materia ya existe. Por favor cambie los datos y el uniqueId.", username);
+            throw  new ExistingEntityException("La materia ya existe. Por favor cambie los datos.", username);
         }
 
     }

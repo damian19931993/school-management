@@ -24,6 +24,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public SaveResponseDto create(SubjectDto request, String username) {
         Subject subject = new Subject(request);
+        subject.setUniqueId(request.getName() + request.getCourseName() + request.getDivision() + request.getYear() + request.getShift());
         subjectRepository.save(subject);
         transactionLogService.createLog(
                 "Crear materia - Éxito",
