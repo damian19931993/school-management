@@ -4,8 +4,10 @@ import com.school_managemtent.dto.SaveResponseDto;
 import com.school_managemtent.dto.SubjectDto;
 import com.school_managemtent.dto.TeacherDto;
 import com.school_managemtent.dto.response.EntityGenericResponse;
+import com.school_managemtent.exception.ExistingEntityException;
 import com.school_managemtent.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +23,15 @@ public class SubjectController {
     }
 
     @PostMapping
-    public ResponseEntity<SaveResponseDto> create(@RequestBody SubjectDto request) {
-        var response = subjectService.create(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<SaveResponseDto> create(@RequestBody SubjectDto request, @RequestHeader("username") String username) {
+        try {
+            var response = subjectService.create(request, username);
+            return ResponseEntity.ok(response);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw  new ExistingEntityException("La materia ya existe. Por favor cambie los datos y el uniqueId.", username);
+        }
+
     }
 
     @GetMapping("/{id}")

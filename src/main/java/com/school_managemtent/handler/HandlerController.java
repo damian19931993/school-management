@@ -43,7 +43,7 @@ public class HandlerController {
         response.setCode("2");
         response.setDescription("Entidad ya existente.");
         response.setMessage(ex.getMessage());
-        createLog("Docente Existente", ex.getUsername() ,ex.getMessage());
+        createLog("Creación de entidad fallida.", ex.getUsername() ,ex.getMessage());
         return ResponseEntity.badRequest().body(response);
     }
 

@@ -8,6 +8,7 @@ public class SubjectDto {
     private String year;
     private String shift;
     private boolean active;
+    private String uniqueId;
 
     public SubjectDto() {
     }
@@ -58,5 +59,13 @@ public class SubjectDto {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 }

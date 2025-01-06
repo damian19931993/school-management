@@ -22,9 +22,14 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public SaveResponseDto create(SubjectDto request) {
+    public SaveResponseDto create(SubjectDto request, String username) {
         Subject subject = new Subject(request);
         subjectRepository.save(subject);
+        transactionLogService.createLog(
+                "Crear materia - Éxito",
+                "Materia creada: " + request.getName() + " " + request.getCourseName() + " " + request.getDivision(),
+                username
+        );
         return new SaveResponseDto("0", "OK", "Materia creada con éxito.");
     }
 

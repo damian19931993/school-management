@@ -23,6 +23,9 @@ public class Subject {
     private String shift;
     private boolean active;
 
+    @Column(unique = true)
+    private String uniqueId;
+
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TeacherSubject> teacherSubjects = new ArrayList<>();
 
@@ -53,6 +56,7 @@ public class Subject {
         this.year = request.getYear();
         this.shift = request.getShift();
         this.active = request.isActive();
+        this.uniqueId = request.getUniqueId();
     }
 
     public Long getId() {
@@ -141,5 +145,13 @@ public class Subject {
 
     public void setSubjectMarks(List<SubjectMark> subjectMarks) {
         this.subjectMarks = subjectMarks;
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 }
