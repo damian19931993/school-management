@@ -3,6 +3,7 @@ package com.school_managemtent.controller;
 import com.school_managemtent.dto.SaveResponseDto;
 import com.school_managemtent.dto.SubjectDto;
 import com.school_managemtent.dto.TeacherDto;
+import com.school_managemtent.dto.response.AllEntityGenericResponse;
 import com.school_managemtent.dto.response.EntityGenericResponse;
 import com.school_managemtent.exception.ExistingEntityException;
 import com.school_managemtent.service.SubjectService;
@@ -40,4 +41,10 @@ public class SubjectController {
         EntityGenericResponse<SubjectDto> genericResponse = new EntityGenericResponse<>("0","OK",response);
         return ResponseEntity.ok(genericResponse);
     }
+
+    @GetMapping
+    public ResponseEntity<AllEntityGenericResponse<SubjectDto>> findAll(@RequestHeader("username") String username) {
+        return ResponseEntity.ok(subjectService.findAll(username));
+    }
 }
+

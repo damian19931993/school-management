@@ -2,6 +2,7 @@ package com.school_managemtent.dto;
 
 public class SubjectDto {
 
+    private Long id;
     private String name;
     private String courseName;
     private String division;
@@ -67,5 +68,13 @@ public class SubjectDto {
 
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
