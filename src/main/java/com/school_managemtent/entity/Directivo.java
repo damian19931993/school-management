@@ -39,6 +39,10 @@ public class Directivo {
     @OneToMany(mappedBy = "directivo", cascade = CascadeType.ALL)
     private List<UserDirectivo> userDirectivos = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user = new User();
+
     public Directivo() {
     }
 
@@ -195,5 +199,13 @@ public class Directivo {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

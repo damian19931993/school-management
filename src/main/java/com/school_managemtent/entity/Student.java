@@ -29,6 +29,10 @@ public class Student {
     private Date dateOfDown;
     private boolean active;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user = new User();
+
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<UserStudent> userStudents = new ArrayList<>();
 
@@ -266,5 +270,13 @@ public class Student {
 
     public void setStudentMarks(List<StudentMark> studentMarks) {
         this.studentMarks = studentMarks;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

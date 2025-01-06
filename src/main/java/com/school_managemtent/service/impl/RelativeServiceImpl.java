@@ -55,6 +55,8 @@ public class RelativeServiceImpl implements RelativeService {
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("relative");
         user.addRelativeAssociation(relative, true);
+        relative.setUser(user);
+        relativeRepository.save(relative);
         return userRepository.save(user);
     }
 }

@@ -55,6 +55,8 @@ public class DirectivoServiceImpl implements DirectivoService {
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("DIRECTIVO");
         user.addDirectivoAssociation(directivo, true);
+        directivo.setUser(user);
+        directivoRepository.save(directivo);
         return userRepository.save(user);
     }
 }

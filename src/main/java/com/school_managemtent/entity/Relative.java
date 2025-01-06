@@ -35,6 +35,10 @@ public class Relative {
     private Date dateOfDown;
     private boolean active;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user = new User();
+
     @OneToMany(mappedBy = "relative", cascade = CascadeType.ALL)
     private List<UserRelative> userRelatives = new ArrayList<>();
 
@@ -217,5 +221,13 @@ public class Relative {
 
     public void setRelativeStudents(List<RelativeStudent> relativeStudents) {
         this.relativeStudents = relativeStudents;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

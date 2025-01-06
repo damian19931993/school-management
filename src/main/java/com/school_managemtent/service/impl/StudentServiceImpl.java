@@ -56,6 +56,8 @@ public class StudentServiceImpl implements StudentService {
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("student");
         user.addStudentAssociation(student, true);
+        student.setUser(user);
+        studentRepository.save(student);
         return userRepository.save(user);
     }
 }

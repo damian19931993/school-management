@@ -34,6 +34,10 @@ public class Preceptor {
     private Date dateOfDown;
     private boolean active;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user = new User();
+
     @OneToMany(mappedBy = "preceptor", cascade = CascadeType.ALL)
     private List<UserPreceptor> userPreceptors = new ArrayList<>();
 
@@ -223,5 +227,13 @@ public class Preceptor {
 
     public void setPreceptorStudents(List<PreceptorStudent> preceptorStudents) {
         this.preceptorStudents = preceptorStudents;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

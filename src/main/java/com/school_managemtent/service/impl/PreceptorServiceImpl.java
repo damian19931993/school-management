@@ -53,6 +53,8 @@ public class PreceptorServiceImpl implements PreceptorService {
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRole("preceptor");
         user.addPreceptorAssociation(preceptor, true);
+        preceptor.setUser(user);
+        preceptorRepository.save(preceptor);
         return userRepository.save(user);
     }
 }
