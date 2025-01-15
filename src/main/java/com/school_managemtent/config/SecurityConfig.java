@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 "/api/teacher-subject/teacherId"
                         ).hasRole("DIRECTIVO")
                         .requestMatchers(HttpMethod.GET, "/api/teacher/**", "/api/subject/**").hasRole("DIRECTIVO")
-                        .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/user/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/validateToken").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/logout").authenticated()
